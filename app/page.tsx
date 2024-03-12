@@ -1,27 +1,60 @@
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import "./globals.css";
+import { Button } from "@/components/ui/button";
+import { setInterval } from "timers";
+// import Clock from "./clock";
+// import Clock from "react-live-clock";
 
-export default function Home() {
+function page() {
   return (
-    <div className="containner">
-      {/* <h1>TEST</h1> */}
+    <div className="containner ">
+      <div className="bg-local  bgImg grid grid-cols-1">
+        <div className=" mophlogo ">
+          <Image
+            src="/image/MOPH 4.png"
+            alt={""}
+            width={47}
+            height={48}
+          ></Image>
+        </div>
+        <div className=" grid grid-cols-1  justify-self-center">
+          <Image
+            className="flex items-center self-start ml-1  mb-3"
+            src="/image/personal w.png"
+            alt={""}
+            width={130}
+            height={135}
+          ></Image>
+        </div>
+        <div className=" grid grid grid-flow-row auto-rows-max justify-self-center content-center  ">
+          {/* <div className=" grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1  items-center"> */}
+          <div className="textdescrip text-2xl mt-2">
+            <h3>สุปรีญา เลิศปาน</h3>
+          </div>
 
-      <div className="bg-local"></div>
+          <div className="text-dep  text-center text-gray-300 ">
+            <h3>นักวิชาการคอมพิวเตอร์ปฏิบัติการ</h3>
+          </div>
 
-      <div className="flex justify-center ">
-        <Image
-          className="fixed top-0 left-0 right-0"
-          src="/image/MOPH 4.png"
-          width={50}
-          height={70}
-          alt="Picture of the author"
-        />
-        <Image
-          src="/image/ID-Front 1.png"
-          width={331}
-          height={603}
-          alt="Picture of the author"
-        />
+          {/* <div className="row"> */}
+          <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
+            <Button className="border-4 bg-[#DFE0E1] border-white w-[178px] h-[58px] text-lg">
+              OUT OF RANGE
+            </Button>
+          </div>
+
+          {/* <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
+            <Button className="border-4 bg-[#3956BF] border-white w-[178px] h-[58px] text-3xl">
+              CLOCK IN
+            </Button>
+          </div> */}
+          {/* </div> */}
+        </div>
       </div>
     </div>
   );
 }
+
+export default page;

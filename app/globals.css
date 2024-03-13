@@ -111,6 +111,18 @@ body {
    
     /* background-attachment: fixed; */
 }
+.bgImghos{
+    background-image: url('../public/image/PerfectDay_head\ 1.png');
+    background-color: #30485E;
+    background-repeat: no-repeat, no-repeat;
+    background-position: center;
+    position: absolute;
+    width: 359px;
+    height: 204px;
+    justify-content: center;
+   
+    /* background-attachment: fixed; */
+}
 
 .mophlogo {
     /* image: url('../public/image/MOPH\ 4.png'); */

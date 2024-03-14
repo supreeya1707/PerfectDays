@@ -48,8 +48,10 @@ function page() {
     console.log("data", data);
     const res = await axios.post(`${pathUrl}/worker/checklogin`, {
       // cid:"1329900007811",
+
       cid: data.cid,
       passcode: data.passcode,
+      lineid:lineid
     });
     console.log("res login : ", res.data);
     if (res.data.ok) {
@@ -95,8 +97,8 @@ function page() {
           height={214}
         ></Image>
       </div>
-      {lineid}
-      <Form {...form}>
+      {}
+      <Form {...form}>lineid
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
           <div className=" bgblue grid grid grid-flow-row auto-rows-max justify-self-center content-start  ">
             <FormField

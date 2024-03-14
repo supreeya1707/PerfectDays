@@ -24,8 +24,8 @@ import axios from "axios";
 import liff from "@line/liff";
 import Swal from "sweetalert2";
 const LoginFormSchema = z.object({
-  username: z.string({ required_error: "กรุณาใส่ Username" }),
-  password: z.string({ required_error: "กรุณาใส่ Password" }),
+  cid: z.string({ required_error: "กรุณาใส่ Username" }),
+  passcode: z.string({ required_error: "กรุณาใส่ Password" }),
 });
 
 function page() {
@@ -39,17 +39,17 @@ function page() {
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
-      username: "",
-      password: "",
+      cid: "",
+      passcode: "",
     },
   });
   // Submit
   const onSubmit = async (data: LoginFormValues) => {
     console.log("data", data);
     const res = await axios.post(`${pathUrl}/worker/checklogin`, {
-      cid:"1329900007811",
-      username: data.username,
-      password: data.password,
+      // cid:"1329900007811",
+      cid: data.cid,
+      passcode: data.passcode,
     });
     console.log("res login : ", res.data);
     if (res.data.ok) {

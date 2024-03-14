@@ -21,18 +21,21 @@ import { useForm } from "react-hook-form";
 // import Clock from "react-live-clock";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import liff from "@line/liff";
+import Swal from "sweetalert2";
 const LoginFormSchema = z.object({
   username: z.string({ required_error: "กรุณาใส่ Username" }),
   password: z.string({ required_error: "กรุณาใส่ Password" }),
 });
 
 function page() {
-      type LoginFormValues = z.infer<typeof LoginFormSchema>;
- const pathUrl: any = process.env.pathUrl;
+  type LoginFormValues = z.infer<typeof LoginFormSchema>;
+  const pathUrl: any = process.env.pathUrl;
   const searchParams = useSearchParams();
   const lineid = searchParams.get("lineid");
-
-// form
+  const [profile, setProfile] = useState<any>({});
+  const [lineId, setLineId] = useState("");
+  // form
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -41,17 +44,44 @@ function page() {
     },
   });
   // Submit
-  const onSubmit=async (data: LoginFormValues) =>{
+  const onSubmit = async (data: LoginFormValues) => {
     console.log("data", data);
     const res = await axios.post(`${pathUrl}/worker/checklogin`, {
+      cid:"1329900007811",
       username: data.username,
       password: data.password,
     });
     console.log("res login : ", res.data);
     if (res.data.ok) {
-      
+
+      console.log('resOK', res.data.message);
+      if (res.data.message.length > 0) {
+        const profile = await liff.getProfile();
+        console.log('profile', profile);
+        setProfile(profile);
+        setLineId(profile?.userId);
+        console.warn(lineId);
+        const dataSend = {
+          token_line: `${profile.userId}`,
+        };
+      }
+
+      else {
+        Swal.fire({
+          icon: "error",
+          title: "เข้าสู่ระบบไม่สำเร็จ",
+          showConfirmButton: false,
+          showCloseButton: true,
+
+        }).then(() => {
+          form.reset();
+          
+        });
+      }
+    }else {
+      throw new Error(res.data.error);
     }
-  }
+  };
 
 
   return (
@@ -67,36 +97,46 @@ function page() {
       </div>
       {lineid}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input placeholder="username" {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {/* <div className=" bgblue grid grid grid-flow-row auto-rows-max justify-self-center content-start  ">
-            <div className="mt-5 w-[239px]  h-[41px]  ">
-              <Input type="username" placeholder="username" />
-            </div>
-            <div className="mt-5 w-[239px]  h-[41px] grid grid-cols-auto  justify-self-center ">
-              <Input type="password" placeholder="password " />
-            </div>
-            <div className="mt-5 w-[175px]  h-[41px] grid grid-cols-auto  justify-self-center ">
-              <Button className="border-2 bg-[#F26B22] border-white">
-                Login
-              </Button>
-            </div>
-          </div> */}
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+          <div className=" bgblue grid grid grid-flow-row auto-rows-max justify-self-center content-start  ">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input placeholder="username" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex flex-col space-y-1.5 ">
+                    <FormControl>
+                      <Input placeholder="password" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is your public display name.
+                    </FormDescription>
+                    <FormMessage />
+                  </div>
+
+
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Submit</Button>
+          </div>
+          
         </form>
       </Form>
     </div>

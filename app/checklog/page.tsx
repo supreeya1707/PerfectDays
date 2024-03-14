@@ -47,10 +47,11 @@ function Checklogpage() {
              console.log("res2", checkLineId.data);
              console.log('checkLineId', checkLineId)
                if (checkLineId.data.message.length > 0) {
-                 const stafftype = checkLineId.data.message[0].staff_type;
+                 const stafftype = checkLineId.data.message[0];
                    setCheckuser(true);
                    setUser(checkLineId.data[0]);
                    //    rout to page checkin...
+                   router.push(`/checkin/ perfectdays`);
                    
                } else {
                    router.push("/checkin/login?lineid="+profile.userId);

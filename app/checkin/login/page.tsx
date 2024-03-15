@@ -48,10 +48,10 @@ function page() {
     console.log("data", data);
     const res = await axios.post(`${pathUrl}/worker/checklogin`, {
       // cid:"1329900007811",
-
+lineid: profile.userId,
       cid: data.cid,
       passcode: data.passcode,
-      lineid:lineid
+      // lineid:lineid
     });
     console.log("res login : ", res.data);
     if (res.data.ok) {

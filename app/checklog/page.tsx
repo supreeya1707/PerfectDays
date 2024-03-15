@@ -51,7 +51,8 @@ function Checklogpage() {
                    setCheckuser(true);
                    setUser(checkLineId.data[0]);
                    //    rout to page checkin...
-                   router.push(`/checkin/ perfectdays`);
+                  router.replace('/checkin/perfectdays')
+                 
                    
                } else {
                    router.push("/checkin/login?lineid="+profile.userId);

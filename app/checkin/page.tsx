@@ -1,9 +1,8 @@
-import React, { useEffect} from 'react'
-import liff from "@line/liff"
+"use client";
+import React, { useEffect } from 'react'
+
 export default function page() {
-  useEffect(() => { 
-liff.init({liffId: ' '})
-  },[]);
+ 
   return (
     <div>page</div>
   )

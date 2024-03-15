@@ -37,7 +37,7 @@ function page() {
           <div className="text-dep  text-center text-gray-300 ">
             <h3>นักวิชาการคอมพิวเตอร์ปฏิบัติการ</h3>
           </div>
-          <div className=" flex items-center justify-center    border-4 rounded-lg p-2  border-[#3956BF] w-[220px] h-[49px]">
+          {/* <div className=" flex items-center justify-center    border-4 rounded-lg p-2  border-[#3956BF] w-[220px] h-[49px]">
             <label className="text-center  text-[40px] text-[#3956BF] ">
               08:14
             </label>
@@ -46,24 +46,24 @@ function page() {
             <label className="text-center  text-[40px] text-[#056839] ">
               16:45
             </label>
-          </div>
+          </div> */}
 
           {/* <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
             <Button className="border-4 bg-[#DFE0E1] border-white w-[178px] h-[58px] rounded-lg text-lg ">
               OUT OF RANGE
             </Button>
           </div> */}
-          <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
+          {/* <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
             <Button className="border-4 bg-[#056839] border-white w-[178px] h-[58px] rounded-lg text-lg ">
               CLOCK OUT
             </Button>
-          </div>
+          </div> */}
 
-          {/* <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
-            <Button className="border-4 bg-[#3956BF] border-white w-[178px] h-[58px] text-3xl">
+          <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
+            <Button className="border-4 bg-[#3956BF] border-gray w-[178px] h-[58px] text-3xl">
               CLOCK IN
             </Button>
-          </div> */}
+          </div>
           {/* </div> */}
         </div>
       </div>

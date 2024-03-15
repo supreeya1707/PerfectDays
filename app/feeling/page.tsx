@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { setInterval } from "timers";
+import Emotion from "./components/emotion";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";
 
@@ -41,7 +42,7 @@ function page() {
             </div>
             <div className="row mt-5">
               <div className="grid grid-cols-3 gap-4 justify-items-center ">
-                <div className="grid grid-cols1 grid-rows-2 justify-items-center">
+                <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
                   <Image
                     src="/image/happy.png"
                     alt={""}
@@ -74,6 +75,10 @@ function page() {
                     Poor
                   </label>
                 </div>
+              </div>
+              <div className="">mi</div>
+              <div className="">
+                <Emotion title="mikung1234" disabled={false}></Emotion>
               </div>
             </div>
           </div>

@@ -23,18 +23,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import liff from "@line/liff";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 const LoginFormSchema = z.object({
   cid: z.string({ required_error: "กรุณาใส่ Username" }),
   passcode: z.string({ required_error: "กรุณาใส่ Password" }),
 });
 
 function page() {
+  const router = useRouter(); 
   type LoginFormValues = z.infer<typeof LoginFormSchema>;
   const pathUrl: any = process.env.pathUrl;
   const searchParams = useSearchParams();
   const lineid = searchParams.get("lineid");
   const [profile, setProfile] = useState<any>({});
-  const [lineId, setLineId] = useState("");
+  
+  // const [lineId, setLineId] = useState("");
   // form
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
@@ -48,7 +51,7 @@ function page() {
     console.log("data", data);
     const res = await axios.post(`${pathUrl}/worker/checklogin`, {
       // cid:"1329900007811",
-lineid: profile.userId,
+      lineid: lineid,
       cid: data.cid,
       passcode: data.passcode,
       // lineid:lineid
@@ -57,27 +60,26 @@ lineid: profile.userId,
     if (res.data.ok) {
 
       console.log('resOK', res.data.message);
-      if (res.data.message.length > 0) {
-        const profile = await liff.getProfile();
-        console.log('profile', profile);
-        setProfile(profile);
-        setLineId(profile?.userId);
-        console.warn(lineId);
-        const dataSend = {
-          token_line: `${profile.userId}`,
-        };
+      if (res.data.message.cid) {
+        // const profile = await liff.getProfile();
+        // console.log('profile', profile);
+        // setProfile(profile);
+        // setLineId(profile?.userId);
+        // console.warn(lineId);
+        // const dataSend = {
+        //   token_line: `${profile.userId}`,
+        // };
+        router.push("/checkin/perfectdays?cid=" + res.data.message.cid);
       }
-
       else {
         Swal.fire({
           icon: "error",
           title: "เข้าสู่ระบบไม่สำเร็จ",
           showConfirmButton: false,
           showCloseButton: true,
-
+          html: "Username หรือ Password ไม่ถูกต้อง<br>" + "กรุณาลองอีกครั้ง",
         }).then(() => {
           form.reset();
-          
         });
       }
     }else {
@@ -97,38 +99,36 @@ lineid: profile.userId,
           height={214}
         ></Image>
       </div>
-      {}
-      <Form {...form}>lineid
+      {/* {lineid} */}
+      <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
-          <div className=" bgblue grid grid grid-flow-row auto-rows-max justify-self-center content-start  ">
+          <div className="pt-10 bgblue grid grid grid-flow-row auto-rows-max justify-self-center content-start  ">
             <FormField
               control={form.control}
-              name="username"
+              name="cid"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  {/* <FormLabel>เลขบัตรประจำตัวประชาชน</FormLabel> */}
                   <FormControl>
-                    <Input placeholder="username" {...field} />
+                    <Input placeholder="เลขบัตรประชาชน" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="password"
+              name="passcode"
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex flex-col space-y-1.5 ">
+                  <div className="flex flex-col space-y-1.5 mt-5 ">
                     <FormControl>
-                      <Input placeholder="password" {...field} />
+                      <Input placeholder="passcode" maxLength={6} {...field} />
                     </FormControl>
-                    <FormDescription>
+                    {/* <FormDescription>
                       This is your public display name.
-                    </FormDescription>
+                    </FormDescription> */}
                     <FormMessage />
                   </div>
 
@@ -136,7 +136,7 @@ lineid: profile.userId,
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" className="mt-5">Submit</Button>
           </div>
           
         </form>

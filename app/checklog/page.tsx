@@ -51,8 +51,10 @@ function Checklogpage() {
                    setCheckuser(true);
                    setUser(checkLineId.data[0]);
                    //    rout to page checkin...
-                  router.replace('/checkin/perfectdays')
-                 
+                  router.replace(
+                    "/checkin/perfectdays?cid=" + checkLineId.data.message[0].cid
+                  );
+                //  console.log("check CID", checkLineId.data.message[0].cid);
                    
                } else {
                    router.push("/checkin/login?lineid="+profile.userId);

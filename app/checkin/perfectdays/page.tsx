@@ -107,15 +107,15 @@ function page() {
             </div>
           )}
           {distance < 300 &&
-            checkclockin == null && (
-              <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
-                <Button className="border-4 bg-[#3956BF] border-gray w-[178px] h-[58px] text-3xl cursor-pointer">
-                  CLOCK IN
-                </Button>
-              </div>
-            ) }
-          {checkclockin != null && checkclockout != null && (
+           checkclockin == null && (
+            <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
+              <Button className="border-4 bg-[#3956BF] border-gray w-[178px] h-[58px] text-3xl cursor-pointer">
+                CLOCK IN
+              </Button>
+            </div>
+          )}{checkclockin != null && checkclockout != null && (
             <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center ">
+              
               <div className=" flex items-center justify-center    border-4 rounded-lg p-2  border-[#3956BF] w-[220px] h-[49px]">
                 <label className="text-center  text-[40px] text-[#3956BF] ">
                   {data.clockin}
@@ -129,7 +129,7 @@ function page() {
               </div>
             </div>
           )}
-          {/* {distance < 300 && checkclockin != null && checkclockout == null && (
+          {distance < 300 && checkclockin != null && checkclockout == null && (
             <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center ">
               {/* <div className=" flex items-center justify-center    border-4 rounded-lg p-2  border-[#3956BF] w-[220px] h-[49px]">
                 <label className="text-center  text-[40px] text-[#3956BF] ">
@@ -147,8 +147,8 @@ function page() {
                 </Button>
               </div>
             </div>
-          )} */}
-
+          )}
+          
           {/* <div className=" flex items-center justify-center    border-4 rounded-lg p-2  border-[#3956BF] w-[220px] h-[49px]">
             <label className="text-center  text-[40px] text-[#3956BF] ">
               08:14

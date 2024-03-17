@@ -77,9 +77,7 @@ function page() {
                 </div>
               </div>
               <div className="">mi</div>
-              <div className="">
-                <Emotion title="mikung1234" disabled={false}></Emotion>
-              </div>
+              
             </div>
           </div>
         </div>

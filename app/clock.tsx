@@ -21,8 +21,8 @@ export const Clock = ({ time: initial }: Props) => {
   }, []);
 
   return (
-    <div className="text-2xl  justify-items-center ml-14 ">
-      <Time time={time} />
+    <div className="text-4xl  justify-items-center ml-14 ">
+      <Time time={time}/>
     </div>
   );
 };

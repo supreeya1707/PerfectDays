@@ -4,11 +4,92 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { setInterval } from "timers";
-import Emotion from "./components/emotion";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import dayjs from "dayjs";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useRouter, useSearchParams } from "next/navigation";
+
 // import Clock from "./clock";
 // import Clock from "react-live-clock";
 
 function page() {
+  const [btnchang, setbtnchang] = useState(" ");
+  const router = useRouter();
+  const pathUrl: any = process.env.pathUrl;
+  const searchParams = useSearchParams();
+  const cid = searchParams.get("cid");
+  const transaction_id = searchParams.get("transaction_id");
+  const getBTN = (e: any) => {
+    // setMessage(e);
+
+    setbtnchang(e.target.value);
+
+    console.log("value is btn:", e.target.value);
+  };
+  const upDateEmotion = async (e: number) => {
+    // setMessage(e);
+    const res: any = await axios.put(
+      `${pathUrl}/perfectdays/${transaction_id}`,
+      {
+        emotion: e,
+      }
+    );
+    if (res.data.ok) {
+      router.replace('/checkin/perfectdays?cid='+cid)
+    }
+  };
+  console.log("BTN", btnchang);
+  const postData = async () => {
+    const dataSend = {
+      emotion: btnchang,
+    };
+    console.log("datasend", dataSend);
+    const res = await axios.put(
+      `${pathUrl}/perfectdays/${transaction_id}`,
+      dataSend
+    );
+
+    console.log("res send data", res.data);
+
+    if (res.data.ok) {
+      // alert("บันทึกข้อมูลสำเร็จ");
+      Swal.fire({
+        title: "SUCCESS!",
+        text: "บันทึกข้อมูลสำเร็จ",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+
+        // confirmButtonText: "รับทราบ!",
+      });
+      console.log("res : ", res.data);
+
+      location.reload();
+      router.push("/checkin/perfectdays?cid=" + cid);
+    } else {
+      throw new Error(res.data.error);
+    }
+  };
+  useEffect(() => {
+    const initial = async () => {
+      const res = await axios.get(`${pathUrl}/worker/getdataworker/${cid}`);
+      console.log(res.data);
+      if (res.data.ok) {
+      }
+    };
+    initial();
+  }, []);
   return (
     <div className="containner ">
       <div className="bg-local  bgImgback grid grid-cols-1">
@@ -28,14 +109,27 @@ function page() {
               </label>
             </div>
             <div className="row mt-5 ">
-              <div className="grid grid-cols-1 gap-1 justify-items-center">
+              <div
+                onClick={() => upDateEmotion(4)}
+                className="grid grid-cols-1 gap-1 justify-items-center cursor-pointer"
+              >
+                {/* <Button
+                  className="w-[68px] h-[65px] bg-center bg-cover bg-transparent bg-[url('/image/Group1016.png')] "
+                  value="4"
+                  id="Perfect"
+                  // onClick={(ev: any) => getBTN(ev)}
+                ></Button> */}
                 <Image
                   src="/image/Group1016.png"
                   alt={""}
                   width={68}
-                  height={68}
+                  height={65}
                 ></Image>
-                <label className="text-[18px] font-bold text-[#0093D2] ">
+                <label
+                  className="text-[18px] font-bold text-[#0093D2]  "
+                  id="Perfect"
+                  htmlFor="Perfect"
+                >
                   Perfect Day
                 </label>
               </div>
@@ -43,41 +137,61 @@ function page() {
             <div className="row mt-5">
               <div className="grid grid-cols-3 gap-4 justify-items-center ">
                 <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
-                  <Image
+                  <Button
+                    className="w-[68px] h-[65px] bg-center bg-cover bg-transparent bg-[url('/image/happy.png')] "
+                    value="3"
+                    id="happy"
+                    onClick={(ev: any) => getBTN(ev)}
+                  ></Button>
+                  {/* <Image
                     src="/image/happy.png"
                     alt={""}
                     width={68}
                     height={65}
-                  ></Image>
-                  <label className="text-[16px] font-bold  text-[#D43A7B] ">
+                  ></Image> */}
+                  <label
+                    className="text-[16px] font-bold  text-[#D43A7B] "
+                    id="happy"
+                  >
                     Happy
                   </label>
                 </div>
-                <div className="grid grid-cols1 grid-rows-2 justify-items-center">
-                  <Image
-                    src="/image/everage.png"
-                    alt={""}
-                    width={68}
-                    height={65}
-                  ></Image>
-                  <label className="text-[16px] font-bold  text-[#389F2F] ">
+                <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
+                  <Button
+                    className="w-[68px] h-[65px] bg-center bg-cover bg-transparent bg-[url('/image/everage.png')] "
+                    value="2"
+                    id="Everage"
+                    onClick={(ev: any) => getBTN(ev)}
+                  ></Button>
+
+                  <label
+                    className="text-[16px] font-bold  text-[#389F2F] "
+                    id="Everage"
+                  >
                     Everage
                   </label>
                 </div>
-                <div className="grid grid-cols1 grid-rows-2 justify-items-center">
-                  <Image
+                <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
+                  <Button
+                    className="w-[68px] h-[65px] bg-center bg-cover bg-transparent bg-[url('/image/poor.png')] "
+                    value="1"
+                    id="poor"
+                    onClick={(ev: any) => getBTN(ev)}
+                  ></Button>
+                  {/* <Image
                     src="/image/poor.png"
                     alt={""}
                     width={68}
                     height={65}
-                  ></Image>
-                  <label className="text-[16px] font-bold  text-[#764416] ">
+                  ></Image> */}
+                  <label
+                    className="text-[16px] font-bold  text-[#764416] "
+                    id="poor"
+                  >
                     Poor
                   </label>
                 </div>
               </div>
-              <div className="">mi</div>
-              
             </div>
           </div>
         </div>

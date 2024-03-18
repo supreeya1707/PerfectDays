@@ -77,7 +77,7 @@ function page() {
             position.coords.longitude
           );
           console.log('ddd',d);
-          setDistance((d * 100).toFixed(2));
+          setDistance((d * 1000).toFixed(2));
           console.log("data", distance);
           setData(res.data.message[0]);
           setcheckclockin(res.data.message[0].clockin);

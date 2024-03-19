@@ -33,6 +33,10 @@ function page() {
   const [btncheckout, setbtncheckout] = useState<any>({});
   const [emotion, setEmotion] = useState(" ");
   const [loading, setLoading] = useState(true);
+   const [hours, setHours] = useState("00");
+   const [minutes, setMinutes] = useState("00");
+   const [seconds, setSeconds] = useState("00");
+   const [date, setDate] = useState("date");
   const API_KEY: any = process.env.API_KEY;
   const r = 6371;
 
@@ -92,6 +96,28 @@ function page() {
     };
     initial();
   }, []);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      let d = new Date();
+      var h = d.getHours().toString();
+      var m = d.getMinutes().toString();
+      var s = d.getSeconds().toString();
+     
+      var z =
+        d.getDate().toString().padStart(2, "0") +
+        " / " +
+        (d.getMonth() + 1).toString().padStart(2, "0") +
+        " / " +
+        d.getFullYear();
+      setDate(z);
+      setHours(h.padStart(2, "0"));
+      setMinutes(m.padStart(2, "0"));
+      setSeconds(s.padStart(2, "0"));
+
+      return () => clearInterval(intervalId);
+    }, 1000);
+  }, [seconds, minutes, hours, date]);
+
   console.log("data cide", data.cid);
   const now = new Date();
   const getEmotion = (e: any) => {
@@ -384,27 +410,71 @@ function page() {
           ) : (
             <div></div>
           )}
-
           <div className="grid grid-rows-2 grid-flow-col gap-4 justify-items-center ">
+            <div className="grid grid-cols-1  justify-items-center my-[620px] ">
+              <div className="justify-self-center ml-10 text-4xl">
+                {hours}:{minutes}:{seconds}
+              </div>
+              <div className="grid grid-rows-3 grid-flow-col gap-4  ">
+                {/* <div className="col-start-2 col-span-4 ...">01</div> */}
+                <div className="col-span-2 ">
+                  <div className="text-[16px] text-center mt-3 text-[#8F8B8B]">
+                    Location : {parseFloat(data.organize_lat).toFixed(12)}
+                  </div>
+                </div>
+                <div className=" col-span-2">
+                  <div className="text-[16px] text-center  text-[#8F8B8B]">
+                    ห่างจากสถานที่ทำงาน : {parseFloat(distance).toFixed(3)}
+                  </div>
+                </div>
+                {/* <div className=" col-span-2">
+                  <Button className="bg-[#30485E] text-[16px] w-[214px] h-[40px] " >UPDATE พิกัดอีกครั้ง</Button>
+                </div> */}
+                <div className="row-span-3  ">
+                  <Image
+                    src="/image/destination.png"
+                    alt=""
+                    width={80}
+                    height={80}
+                    // onClick={updateGPS}
+                  ></Image>
+                </div>
+                {/* <div className="col-span-2">
+                  <div className="text-xl text-center  text-[#8F8B8B]">
+                    ห่างจากสถานที่ทำงาน : {distance}
+                  </div>
+                </div> */}
+              </div>
+              {/* <div className="text-2xl text-center font-bold">
+                {data.organize_radius}
+              </div>
+              <div className="text-2xl text-center font-bold">
+                {distance < data.organize_radius ? 1 : 2}
+              </div>
+              <label className="flex flex-col mt-2 mr-5  ">
+                your location :{data.organize_lat}
+              </label>{" "}
+              <br></br> */}
+            </div>
+          </div>
+          {/* <div className="grid grid-rows-2 grid-flow-col gap-4 justify-items-center ">
             <div className="flex flex-col  justify-items-center my-[620px] ">
               <div className="justify-center ml-10">
                 <Clock time={now.getTime()} />
               </div>
-              <div className="text-2xl text-center font-bold">            
-                {distance} m
+              <div className="text-2xl text-center font-bold">{distance} m</div>
+              <div className="text-2xl text-center font-bold">
+                {data.organize_radius}
               </div>
-              <div className="text-2xl text-center font-bold">            
-                {data.organize_radius} 
-              </div>
-              <div className="text-2xl text-center font-bold">            
-                {distance < data.organize_radius ? 1: 2} 
+              <div className="text-2xl text-center font-bold">
+                {distance < data.organize_radius ? 1 : 2}
               </div>
               <label className="flex flex-col mt-2 mr-5  ">
                 your location :{data.organize_lat}
               </label>{" "}
               <br></br>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </>

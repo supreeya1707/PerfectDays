@@ -77,7 +77,7 @@ function page() {
             position.coords.longitude
           );
           console.log('ddd',d);
-          setDistance((d * 1000).toFixed(2));
+          setDistance((d * 1000));
           console.log("data", distance);
           setData(res.data.message[0]);
           setcheckclockin(res.data.message[0].clockin);
@@ -390,7 +390,15 @@ function page() {
               <div className="justify-center ml-10">
                 <Clock time={now.getTime()} />
               </div>
-              <div className="text-2xl text-center font-bold"> {distance} m</div>
+              <div className="text-2xl text-center font-bold">            
+                {distance} m
+              </div>
+              <div className="text-2xl text-center font-bold">            
+                {data.organize_radius} 
+              </div>
+              <div className="text-2xl text-center font-bold">            
+                {distance < data.organize_radius ? 1: 2} 
+              </div>
               <label className="flex flex-col mt-2 mr-5  ">
                 your location :{data.organize_lat}
               </label>{" "}

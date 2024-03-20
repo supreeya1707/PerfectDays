@@ -10,6 +10,9 @@ import dayjs from "dayjs";
 import { Clock } from "@/app/clock";
 import Swal from "sweetalert2";
 import { InfinitySpin } from "react-loader-spinner";
+import liff from "@line/liff";
+import GetOSModule from "@line/liff/get-os";
+import { profile } from "console";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";=
 function page() {
@@ -33,11 +36,12 @@ function page() {
   const [btncheckout, setbtncheckout] = useState<any>({});
   const [emotion, setEmotion] = useState(" ");
   const [loading, setLoading] = useState(true);
-   const [hours, setHours] = useState("00");
-   const [minutes, setMinutes] = useState("00");
-   const [seconds, setSeconds] = useState("00");
-   const [date, setDate] = useState("date");
+  const [hours, setHours] = useState("00");
+  const [minutes, setMinutes] = useState("00");
+  const [seconds, setSeconds] = useState("00");
+  const [date, setDate] = useState("date");
   const API_KEY: any = process.env.API_KEY;
+  const idcardliff: any = process.env.idcardliff;
   const r = 6371;
 
   function haversine(lat1: any, lon1: any, lat2: any, lon2: any) {
@@ -61,48 +65,70 @@ function page() {
     console.log(res.data);
     if (res.data.ok) {
       setData(res.data.message[0]);
+      // setDistance(distance)
+      console.log("ระยะห่าง", distance);
     }
   };
-  useEffect(() => {
-    const initial = async () => {
-      setLoading(true);
-      const res = await axios.get(`${pathUrl}/worker/getdataworker/${cid}`);
-      console.log(res.data);
-      if (res.data.ok) {
-       await navigator.geolocation.getCurrentPosition( async (position: any) => {
-          setLat1(position.coords.latitude);
-          setLong1(position.coords.longitude);
-          console.log("SET lat", position.coords.latitude);
-          const d: number = haversine(
-            res.data.message[0].organize_lat,
-            res.data.message[0].organize_long,
-            // 13.807305, 99.924653,
-            position.coords.latitude,
-            position.coords.longitude
-          );
-          console.log('ddd',d);
-          setDistance((d * 1000));
-          console.log("data", distance);
-          setData(res.data.message[0]);
-          setcheckclockin(res.data.message[0].clockin);
-          setcheckclockout(res.data.message[0].clockout);
-          // setName( res.data.message[0].fname + " "+res.data.message[0].lname);
+  // const getProfile = async () => { 
+    
+  //   liff.init({ liffId: idcardliff }).then(async () => {
+  //     const profile = await liff.getProfile();
+  //     console.log("Profile", profile);
+  //   });
+  // }
 
-          console.log("checkclockin", data.checkclockin);
-          // router.push("/checkin/feeling?cid=" + data.cid);
-        });
-      }
-      setLoading(false);
-    };
-    initial();
-  }, []);
+  const initial = async () => {
+    setLoading(true);
+    const res = await axios.get(`${pathUrl}/worker/getdataworker/${cid}`);
+    console.log(res.data);
+    if (res.data.ok) {
+      await navigator.geolocation.getCurrentPosition(async (position: any) => {
+        setLat1(position.coords.latitude);
+        setLong1(position.coords.longitude);
+        console.log("SET lat", position.coords.latitude);
+        const d: number = haversine(
+          res.data.message[0].organize_lat,
+          res.data.message[0].organize_long,
+          // 13.807305, 99.924653,
+          position.coords.latitude,
+          position.coords.longitude
+        );
+        console.log("ddd", d);
+        setDistance(d * 1000);
+        console.log("datadis", distance);
+        setData(res.data.message[0]);
+        setcheckclockin(res.data.message[0].clockin);
+        setcheckclockout(res.data.message[0].clockout);
+        // setName( res.data.message[0].fname + " "+res.data.message[0].lname);
+
+        console.log("checkclockin", data.checkclockin);
+        // router.push("/checkin/feeling?cid=" + data.cid);
+      });
+    }
+    setLoading(false);
+    // await liff.init({ liffId: idcardliff }).then(async () => {
+    //   const profile = await liff.getProfile();
+    //   console.log("Profile", profile);
+    // });
+    
+  };
+
+  // useEffect(() => {
+
+  //   initial();
+  //   console.log("datadis", distance);
+  // }, []);
+
   useEffect(() => {
+    initial();
+  
+    // console.log("datadis", distance);
     const intervalId = setInterval(() => {
       let d = new Date();
       var h = d.getHours().toString();
       var m = d.getMinutes().toString();
       var s = d.getSeconds().toString();
-     
+
       var z =
         d.getDate().toString().padStart(2, "0") +
         " / " +
@@ -116,15 +142,19 @@ function page() {
 
       return () => clearInterval(intervalId);
     }, 1000);
-  }, [seconds, minutes, hours, date]);
 
-  console.log("data cide", data.cid);
+    // }, [seconds, minutes, hours, date]);
+  }, []);
+
+  // console.log("data cide", data.cid);
+  // console.log("datadistance", distance);
+
   const now = new Date();
   const getEmotion = (e: any) => {
     // setMessage(e);
     setEmotion(e.target.value);
 
-    console.log("value is Emotion:", e.target.value);
+    // console.log("value is Emotion:", e.target.value);
   };
   const postData = async () => {
     const dataSend = {
@@ -136,7 +166,7 @@ function page() {
     console.log("datasend", dataSend);
     const res = await axios.post(`${pathUrl}/perfectdays`, dataSend);
 
-    console.log("res send data", res.data);
+    // console.log("res send data", res.data);
 
     if (res.data.ok) {
       // alert("บันทึกข้อมูลสำเร็จ");
@@ -158,7 +188,7 @@ function page() {
       throw new Error(res.data.error);
     }
   };
-  console.log("transaction", data.transaction_id);
+  // console.log("transaction", data.transaction_id);
   const upsData = async () => {
     const dataSend = {
       // clockin:dayjs(new Date).format("HH:mm") ,
@@ -184,7 +214,7 @@ function page() {
 
         // confirmButtonText: "รับทราบ!",
       });
-      console.log("res : ", data.cid);
+      // console.log("res : ", data.cid);
       // location.reload();
       getData();
     } else {
@@ -206,6 +236,9 @@ function page() {
       getData();
     }
   };
+  // const updateGPS = async () => { 
+    
+  // }
   return (
     <>
       {loading ? (
@@ -417,19 +450,22 @@ function page() {
               </div>
               <div className="grid grid-rows-3 grid-flow-col gap-4  ">
                 {/* <div className="col-start-2 col-span-4 ...">01</div> */}
-                <div className="col-span-2 ">
+                <div className="col-span-2  ">
                   <div className="text-[16px] text-center mt-3 text-[#8F8B8B]">
-                    Location : {parseFloat(data.organize_lat).toFixed(12)}
+                    Location : {parseFloat(data.organize_lat).toFixed(15)}
                   </div>
                 </div>
-                <div className=" col-span-2">
-                  <div className="text-[16px] text-center  text-[#8F8B8B]">
-                    ห่างจากสถานที่ทำงาน : {parseFloat(distance).toFixed(3)}
+                <div className=" col-span-4 ">
+                  <div
+                    className="text-[16px]  text-start
+                    text-[#8F8B8B]"
+                  >
+                    ห่างจากสถานที่ทำงาน : {Math.round(distance)} เมตร
                   </div>
                 </div>
-                {/* <div className=" col-span-2">
-                  <Button className="bg-[#30485E] text-[16px] w-[214px] h-[40px] " >UPDATE พิกัดอีกครั้ง</Button>
-                </div> */}
+                <div className=" col-span-2 ">
+                    <Button className="bg-[#30485E] text-[16px] w-[214px] h-[40px] " onClick={() => initial()}>UPDATE พิกัดอีกครั้ง</Button>
+                </div>
                 <div className="row-span-3  ">
                   <Image
                     src="/image/destination.png"
@@ -439,6 +475,9 @@ function page() {
                     // onClick={updateGPS}
                   ></Image>
                 </div>
+                {/* <div className="text-2xl text-center font-bold">
+                  {distance < data.organize_radius ? 1 : 2}
+                </div> */}
                 {/* <div className="col-span-2">
                   <div className="text-xl text-center  text-[#8F8B8B]">
                     ห่างจากสถานที่ทำงาน : {distance}

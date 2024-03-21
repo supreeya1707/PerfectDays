@@ -41,7 +41,7 @@ function Checklogpage() {
 
             
              const checkLineId = await axios.get(
-               `${pathUrl}/worker/checkline/${profile.userId}`
+               `${pathUrl}/worker/checkline/${profile.userId }`
              );
              console.info(checkLineId.data);
              console.log("res2", checkLineId.data);

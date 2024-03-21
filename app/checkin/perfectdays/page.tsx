@@ -13,6 +13,7 @@ import { InfinitySpin } from "react-loader-spinner";
 import liff from "@line/liff";
 import GetOSModule from "@line/liff/get-os";
 import { profile } from "console";
+import GetOS from "@line/liff/get-os";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";=
 function page() {
@@ -42,6 +43,11 @@ function page() {
   const [date, setDate] = useState("date");
   const API_KEY: any = process.env.API_KEY;
   const idcardliff: any = process.env.idcardliff;
+
+  const [os, setOs] = useState<string>();
+  const [profile, setProfile] = useState<any>({});
+  const [lineId, setLineId] = useState("");
+  const [image, setimage] = useState("");
   const r = 6371;
 
   function haversine(lat1: any, lon1: any, lat2: any, lon2: any) {
@@ -69,13 +75,47 @@ function page() {
       console.log("ระยะห่าง", distance);
     }
   };
-  // const getProfile = async () => { 
-    
-  //   liff.init({ liffId: idcardliff }).then(async () => {
-  //     const profile = await liff.getProfile();
-  //     console.log("Profile", profile);
-  //   });
-  // }
+  const getProfile = async () => {
+    await liff.init({ liffId: idcardliff }).then(async () => {
+      const profile = await liff.getProfile();
+      // const idToken=liff.getIdToken();
+      console.log("Profile", profile);
+      setProfile(profile);
+      setLineId(profile?.userId);
+      console.warn(lineId);
+    });
+    await liff.ready;
+    setimage(profile.pictureUrl);
+    //   liff.use(new GetOS());
+    //   setOs(liff.getOS());
+    //   await liff.init({ liffId: idcardliff }).then(async () => {
+
+    //       const profile = await liff.getProfile();
+
+    //       // console.log(profile);
+    //       // console.log("profile?.userId", profile?.userId);
+    //       setProfile(profile);
+    //       setLineId(profile?.userId);
+
+    //       console.warn(lineId);
+
+    //       const dataSend = {
+    //         token_line: `${profile.userId}`,
+    //       };
+
+    //       const checkLineId = await axios.get(
+    //         `${pathUrl}/worker/checkline/${profile.userId}`
+    //       );
+    //       console.info(checkLineId.data);
+    //       console.log("res2", checkLineId.data);
+    //       console.log("checkLineId", checkLineId);
+
+    //         //  console.log("check CID", checkLineId.data.message[0].cid);
+
+    //   });
+    //   // await liff.ready;
+    // };
+  };
 
   const initial = async () => {
     setLoading(true);
@@ -110,7 +150,6 @@ function page() {
     //   const profile = await liff.getProfile();
     //   console.log("Profile", profile);
     // });
-    
   };
 
   // useEffect(() => {
@@ -121,7 +160,7 @@ function page() {
 
   useEffect(() => {
     initial();
-  
+    getProfile();
     // console.log("datadis", distance);
     const intervalId = setInterval(() => {
       let d = new Date();
@@ -204,16 +243,7 @@ function page() {
 
     if (res_up.data.ok) {
       // alert("บันทึกข้อมูลสำเร็จ");
-      Swal.fire({
-        title: "SUCCESS!",
-        text: "บันทึกข้อมูลสำเร็จ",
-        icon: "success",
-        timer: 1500,
-        showConfirmButton: false,
-        allowOutsideClick: false,
 
-        // confirmButtonText: "รับทราบ!",
-      });
       // console.log("res : ", data.cid);
       // location.reload();
       getData();
@@ -231,13 +261,23 @@ function page() {
       }
     );
     if (res.data.ok) {
+      Swal.fire({
+        title: "SUCCESS!",
+        text: "บันทึกข้อมูลสำเร็จ",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+
+        // confirmButtonText: "รับทราบ!",
+      });
       // router.replace("/checkin/perfectdays?cid=" + cid);
       // location.reload();
       getData();
     }
   };
-  // const updateGPS = async () => { 
-    
+  // const updateGPS = async () => {
+
   // }
   return (
     <>
@@ -259,7 +299,8 @@ function page() {
             <div className=" grid grid-cols-1  justify-self-center">
               <Image
                 className="flex items-center self-start ml-1  rounded-full border-[15px] border-[#F26B22] "
-                src="/image/personal w.png"
+                // src="/image/personal w.png"
+                src={profile.pictureUrl}
                 alt={""}
                 width={130}
                 height={135}
@@ -334,7 +375,7 @@ function page() {
             </div>
           </div>
           {data.emotion == null && data.clockout != null ? (
-            <div className="bg-local  bgImgback grid grid-cols-1">
+            <div className="bg-local bgImgback  grid grid-cols-1">
               <div className=" mophlogo ">
                 <Image
                   src="/image/MOPH 4.png"
@@ -443,48 +484,93 @@ function page() {
           ) : (
             <div></div>
           )}
-          <div className="grid grid-rows-2 grid-flow-col gap-4 justify-items-center ">
-            <div className="grid grid-cols-1  justify-items-center my-[620px] ">
-              <div className="justify-self-center ml-10 text-4xl">
-                {hours}:{minutes}:{seconds}
+          <div className="container  pt-[600px] w-full">
+            {data?.emotion != null ? (
+              <div className="flex flex-col justify-center mt-10">
+                <div className="grid grid-cols-1  justify-items-center">
+                  {data?.emotion == 4 && (
+                    <Image
+                      src={`/image/Group1016.png`}
+                      alt={""}
+                      width={68}
+                      height={65}
+                    ></Image>
+                  )}
+
+                  {data?.emotion == 3 && (
+                    <Image
+                      src={`/image/happy.png`}
+                      alt={""}
+                      width={68}
+                      height={65}
+                    ></Image>
+                  )}
+                  {data?.emotion == 2 && (
+                    <Image
+                      src={`/image/everage.png`}
+                      alt={""}
+                      width={68}
+                      height={65}
+                    ></Image>
+                  )}
+                  {data?.emotion == 1 && (
+                    <Image
+                      src={`/image/poor.png`}
+                      alt={""}
+                      width={68}
+                      height={65}
+                    ></Image>
+                  )}
+                </div>
               </div>
-              <div className="grid grid-rows-3 grid-flow-col gap-4  ">
-                {/* <div className="col-start-2 col-span-4 ...">01</div> */}
-                <div className="col-span-2  ">
-                  <div className="text-[16px] text-center mt-3 text-[#8F8B8B]">
-                    Location : {parseFloat(data.organize_lat).toFixed(15)}
+            ) : (
+              <div className="grid grid-rows-2 grid-flow-col gap-4 justify-items-center ">
+                <div className="grid grid-cols-1  justify-items-center  mt-10">
+                  <div className="justify-self-center ml-10 text-4xl">
+                    {hours}:{minutes}:{seconds}
                   </div>
-                </div>
-                <div className=" col-span-4 ">
-                  <div
-                    className="text-[16px]  text-start
+                  <div className="grid grid-rows-3 grid-flow-col gap-4  ">
+                    {/* <div className="col-start-2 col-span-4 ...">01</div> */}
+                    <div className="col-span-2  ">
+                      <div className="text-[16px] text-center mt-3 text-[#8F8B8B]">
+                        Location : {parseFloat(data.organize_lat).toFixed(15)}
+                      </div>
+                    </div>
+                    <div className=" col-span-4 ">
+                      <div
+                        className="text-[16px]  text-start
                     text-[#8F8B8B]"
-                  >
-                    ห่างจากสถานที่ทำงาน : {Math.round(distance)} เมตร
-                  </div>
-                </div>
-                <div className=" col-span-2 ">
-                    <Button className="bg-[#30485E] text-[16px] w-[214px] h-[40px] " onClick={() => initial()}>UPDATE พิกัดอีกครั้ง</Button>
-                </div>
-                <div className="row-span-3  ">
-                  <Image
-                    src="/image/destination.png"
-                    alt=""
-                    width={80}
-                    height={80}
-                    // onClick={updateGPS}
-                  ></Image>
-                </div>
-                {/* <div className="text-2xl text-center font-bold">
+                      >
+                        ห่างจากสถานที่ทำงาน : {Math.round(distance)} เมตร
+                      </div>
+                    </div>
+                    <div className=" col-span-2 ">
+                      <Button
+                        className="bg-[#30485E] text-[16px] w-[214px] h-[40px] "
+                        onClick={() => initial()}
+                      >
+                        UPDATE พิกัดอีกครั้ง
+                      </Button>
+                    </div>
+                    <div className="row-span-3  ">
+                      <Image
+                        src="/image/destination.png"
+                        alt=""
+                        width={80}
+                        height={80}
+                        // onClick={updateGPS}
+                      ></Image>
+                    </div>
+                    {/* <div className="text-2xl text-center font-bold">
                   {distance < data.organize_radius ? 1 : 2}
                 </div> */}
-                {/* <div className="col-span-2">
+                    {/* <div className="col-span-2">
                   <div className="text-xl text-center  text-[#8F8B8B]">
                     ห่างจากสถานที่ทำงาน : {distance}
                   </div>
                 </div> */}
-              </div>
-              {/* <div className="text-2xl text-center font-bold">
+                  </div>
+                  {/* <div className="text-2xl text-center font-bold">
                 {data.organize_radius}
               </div>
               <div className="text-2xl text-center font-bold">
@@ -494,8 +580,11 @@ function page() {
                 your location :{data.organize_lat}
               </label>{" "}
               <br></br> */}
-            </div>
+                </div>
+              </div>
+            )}
           </div>
+
           {/* <div className="grid grid-rows-2 grid-flow-col gap-4 justify-items-center ">
             <div className="flex flex-col  justify-items-center my-[620px] ">
               <div className="justify-center ml-10">

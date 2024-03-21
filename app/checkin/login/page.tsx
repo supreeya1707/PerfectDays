@@ -37,7 +37,7 @@ function page() {
   const lineid = searchParams.get("lineid");
   const [profile, setProfile] = useState<any>({});
   
-  // const [lineId, setLineId] = useState("");
+  const [lineId, setLineId] = useState("");
   // form
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
@@ -69,7 +69,7 @@ function page() {
         // const dataSend = {
         //   token_line: `${profile.userId}`,
         // };
-        router.push("/checkin/perfectdays?cid=" + res.data.message.cid);
+        router.push("/checkin/perfectdays?cid=" + res.data.message.cid );
       }
       else {
         Swal.fire({
@@ -110,7 +110,7 @@ function page() {
                 <FormItem>
                   {/* <FormLabel>เลขบัตรประจำตัวประชาชน</FormLabel> */}
                   <FormControl>
-                    <Input placeholder="เลขบัตรประชาชน" {...field} />
+                    <Input placeholder="เลขบัตรประชาชน" maxLength={13} {...field} />
                   </FormControl>
                   
                   <FormMessage />

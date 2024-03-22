@@ -3,16 +3,19 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 
 
-function page() {
+function TimeLinePage() {
   return (
     <div className="container">
-      <div className=" grid grid grid-flow-row auto-rows-max justify-self-center content-start">
+      <div className="w-[399px] grid grid-flow-row    w-full">
         <Image
-          className="grid grid-cols-1 justify-items-center self-start  "
-          src="/image/head.png"
-          
-          width={500}
-          height={10} alt={''}          // fill={true}
+          className="  "
+          style={{ height: "100%", width: "100%" }}
+          src="/perfectdays2/image/head.png"
+          width={0}
+          height={0}
+          alt=""
+          sizes="100vw"
+          // fill={true}
         ></Image>
       </div>
       <div className="flex justify-items-center self-start">
@@ -22,4 +25,4 @@ function page() {
   );
 }
 
-export default page
+export default TimeLinePage;

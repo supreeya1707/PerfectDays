@@ -16,7 +16,7 @@ import { profile } from "console";
 import GetOS from "@line/liff/get-os";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";=
-function page() {
+function PerfectdaysPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const cid = searchParams.get("cid");
@@ -290,7 +290,7 @@ function page() {
           <div className="bg-local bgImgback grid grid-cols-1">
             <div className=" mophlogo ">
               <Image
-                src="/image/MOPH 4.png"
+                src="/perfectdays2/image/MOPH 4.png"
                 alt={""}
                 width={47}
                 height={48}
@@ -378,7 +378,7 @@ function page() {
             <div className="bg-local bgImgback  grid grid-cols-1">
               <div className=" mophlogo ">
                 <Image
-                  src="/image/MOPH 4.png"
+                  src="/perfectdays2/image/MOPH 4.png"
                   alt={""}
                   width={47}
                   height={48}
@@ -397,7 +397,7 @@ function page() {
                       className="grid grid-cols-1 gap-1 justify-items-center cursor-pointer"
                     >
                       <Image
-                        src="/image/Group1016.png"
+                        src="/perfectdays2/image/Group1016.png"
                         alt={""}
                         width={68}
                         height={65}
@@ -424,7 +424,7 @@ function page() {
                       // onClick={(ev: any) => getBTN(ev)}
                     ></Button> */}
                         <Image
-                          src="/image/happy.png"
+                          src="/perfectdays2/image/happy.png"
                           alt={""}
                           width={68}
                           height={65}
@@ -441,7 +441,7 @@ function page() {
                         className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer"
                       >
                         <Image
-                          src="/image/everage.png"
+                          src="/perfectdays2/image/everage.png"
                           alt={""}
                           width={68}
                           height={65}
@@ -464,7 +464,7 @@ function page() {
                       // onClick={(ev: any) => getBTN(ev)}
                     ></Button> */}
                         <Image
-                          src="/image/poor.png"
+                          src="/perfectdays2/image/poor.png"
                           alt={""}
                           width={68}
                           height={65}
@@ -491,7 +491,7 @@ function page() {
                   {data?.emotion == 4 && (
                     <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
                       <Image
-                        src={`/image/Group1016.png`}
+                        src={`/perfectdays2/image/Group1016.png`}
                         alt={""}
                         width={68}
                         height={65}
@@ -509,7 +509,7 @@ function page() {
                   {data?.emotion == 3 && (
                     <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
                       <Image
-                        src={`/image/happy.png`}
+                        src={`/perfectdays2/image/happy.png`}
                         alt={""}
                         width={68}
                         height={65}
@@ -525,7 +525,7 @@ function page() {
                   {data?.emotion == 2 && (
                     <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
                       <Image
-                        src={`/image/everage.png`}
+                        src={`/perfectdays2/image/everage.png`}
                         alt={""}
                         width={68}
                         height={65}
@@ -541,7 +541,7 @@ function page() {
                   {data?.emotion == 1 && (
                     <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
                       <Image
-                        src={`/image/poor.png`}
+                        src={`/perfectdays2/image/poor.png`}
                         alt={""}
                         width={68}
                         height={65}
@@ -587,7 +587,7 @@ function page() {
                     </div>
                     <div className="row-span-3  ">
                       <Image
-                        src="/image/destination.png"
+                        src="/perfectdays2/image/destination.png"
                         alt=""
                         width={80}
                         height={80}
@@ -600,7 +600,7 @@ function page() {
                     {/* <div className="col-span-2">
                   <div className="text-xl text-center  text-[#8F8B8B]">
                     ห่างจากสถานที่ทำงาน : {distance}
-                  </div>
+                  </div><
                 </div> */}
                   </div>
                   {/* <div className="text-2xl text-center font-bold">
@@ -642,4 +642,4 @@ function page() {
   );
 }
 
-export default page;
+export default PerfectdaysPage;

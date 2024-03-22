@@ -22,7 +22,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";
 
-function page() {
+function FeelingPage() {
   const [btnchang, setbtnchang] = useState(" ");
   const router = useRouter();
   const pathUrl: any = process.env.pathUrl;
@@ -95,7 +95,7 @@ function page() {
       <div className="bg-local  bgImgback grid grid-cols-1">
         <div className=" mophlogo ">
           <Image
-            src="/image/MOPH 4.png"
+            src="/perfectdays2/image/MOPH 4.png"
             alt={""}
             width={47}
             height={48}
@@ -120,7 +120,7 @@ function page() {
                   // onClick={(ev: any) => getBTN(ev)}
                 ></Button> */}
                 <Image
-                  src="/image/Group1016.png"
+                  src="/perfectdays2/image/Group1016.png"
                   alt={""}
                   width={68}
                   height={65}
@@ -200,4 +200,4 @@ function page() {
   );
 }
 
-export default page;
+export default FeelingPage;

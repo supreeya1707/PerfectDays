@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // reactStrictMode: false,
-    // trailingSlash: true,
-    // output: 'export',
-    // basePath: '/perfectdays2',
+    reactStrictMode: false,
+    trailingSlash: true,
+    output: 'export',
+    basePath: '/perfectdays2',
     images: {
         domains: ['profile.line-scdn.net'],
         unoptimized: true,

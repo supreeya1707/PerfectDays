@@ -29,7 +29,7 @@ const LoginFormSchema = z.object({
   passcode: z.string({ required_error: "กรุณาใส่ Password" }),
 });
 
-function page() {
+function LoginPage() {
   const router = useRouter(); 
   type LoginFormValues = z.infer<typeof LoginFormSchema>;
   const pathUrl: any = process.env.pathUrl;
@@ -93,7 +93,7 @@ function page() {
       <div className=" grid grid grid-flow-row auto-rows-max justify-self-center content-start">
         <Image
           className="flex justify-items-center self-start "
-          src="/image/PerfectDay_head 1.png"
+          src="/perfectdays2/image/PerfectDay_head 1.png"
           alt={""}
           width={390}
           height={214}
@@ -110,9 +110,13 @@ function page() {
                 <FormItem>
                   {/* <FormLabel>เลขบัตรประจำตัวประชาชน</FormLabel> */}
                   <FormControl>
-                    <Input placeholder="เลขบัตรประชาชน" maxLength={13} {...field} />
+                    <Input
+                      placeholder="เลขบัตรประชาชน"
+                      maxLength={13}
+                      {...field}
+                    />
                   </FormControl>
-                  
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -131,20 +135,19 @@ function page() {
                     </FormDescription> */}
                     <FormMessage />
                   </div>
-
-
                 </FormItem>
               )}
             />
-            <Button type="submit" className="mt-5">Submit</Button>
+            <Button type="submit" className="mt-5">
+              Submit
+            </Button>
           </div>
-          
         </form>
       </Form>
     </div>
   );
 }
 
-export default page;
+export default LoginPage;
 
 

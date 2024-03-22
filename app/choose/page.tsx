@@ -7,13 +7,13 @@ import { setInterval } from "timers";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";
 
-function page() {
+function ChoosePage() {
   return (
     <div className="containner ">
       <div className="bg-local  bgImgback grid grid-cols-1">
         <div className="  mophlogo ">
           <Image
-            src="/image/MOPH 4.png"
+            src="/perfectdays2/image/MOPH 4.png"
             alt={""}
             width={47}
             height={48}
@@ -44,7 +44,7 @@ function page() {
       </div>
       <div className=" place-self-end">
         <Image
-          src="/image/repeat 1.png"
+          src="/perfectdays2/image/repeat 1.png"
           alt={""}
           width={47}
           height={48}
@@ -54,4 +54,4 @@ function page() {
   );
 }
 
-export default page;
+export default ChoosePage;

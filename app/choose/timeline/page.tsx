@@ -25,4 +25,4 @@ function TimeLinePage() {
   );
 }
 
-export default TimeLinePage;
+export default page

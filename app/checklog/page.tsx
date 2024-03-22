@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Swal from "sweetalert2";
 import { InfinitySpin } from 'react-loader-spinner';
-function Checklogpage() {
+function ChecklogPage() {
     const router = useRouter(); 
     const pathUrl: any = process.env.pathUrl;
     const idcardliff: any = process.env.idcardliff;
@@ -89,4 +89,4 @@ function Checklogpage() {
   );
 }
 
-export default Checklogpage;
+export default ChecklogPage;

@@ -642,4 +642,4 @@ function PerfectdaysPage() {
   );
 }
 
-export default page;
+export default PerfectdaysPage;

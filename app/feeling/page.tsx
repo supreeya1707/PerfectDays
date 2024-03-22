@@ -22,7 +22,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";
 
-function page() {
+function FeelingPage() {
   const [btnchang, setbtnchang] = useState(" ");
   const router = useRouter();
   const pathUrl: any = process.env.pathUrl;
@@ -200,4 +200,4 @@ function page() {
   );
 }
 
-export default page;
+export default FeelingPage;

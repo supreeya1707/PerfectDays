@@ -29,7 +29,7 @@ const LoginFormSchema = z.object({
   passcode: z.string({ required_error: "กรุณาใส่ Password" }),
 });
 
-function page() {
+function LoginPage() {
   const router = useRouter(); 
   type LoginFormValues = z.infer<typeof LoginFormSchema>;
   const pathUrl: any = process.env.pathUrl;
@@ -145,6 +145,6 @@ function page() {
   );
 }
 
-export default page;
+export default LoginPage;
 
 

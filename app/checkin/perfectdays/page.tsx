@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import { profile } from "console";
 import GetOS from "@line/liff/get-os";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";=
-function page() {
+function PerfectDaysPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const cid = searchParams.get("cid");
@@ -609,4 +609,4 @@ function page() {
   );
 }
 
-export default page;
+export default PerfectDaysPage;

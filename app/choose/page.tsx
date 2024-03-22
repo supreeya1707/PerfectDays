@@ -7,7 +7,7 @@ import { setInterval } from "timers";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";
 
-function page() {
+function ChoosePage() {
   return (
     <div className="containner ">
       <div className="bg-local  bgImgback grid grid-cols-1">
@@ -54,4 +54,4 @@ function page() {
   );
 }
 
-export default page;
+export default ChoosePage;

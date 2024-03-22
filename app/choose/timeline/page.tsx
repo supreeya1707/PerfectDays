@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 
 
-function page() {
+function TimelinePage() {
   return (
     <div className="container">
       <div className=" grid grid grid-flow-row auto-rows-max justify-self-center content-start">
@@ -22,4 +22,4 @@ function page() {
   );
 }
 
-export default page
+export default TimelinePage

@@ -489,37 +489,70 @@ function PerfectDaysPage() {
               <div className="flex flex-col justify-center mt-10">
                 <div className="grid grid-cols-1  justify-items-center">
                   {data?.emotion == 4 && (
-                    <Image
-                      src={`/image/Group1016.png`}
-                      alt={""}
-                      width={68}
-                      height={65}
-                    ></Image>
+                    <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
+                      <Image
+                        src={`/image/Group1016.png`}
+                        alt={""}
+                        width={68}
+                        height={65}
+                      ></Image>
+                      <label
+                        className="text-[18px] font-bold text-[#0093D2]  "
+                        id="Perfect"
+                        htmlFor="Perfect"
+                      >
+                        Perfect Day
+                      </label>
+                    </div>
                   )}
 
                   {data?.emotion == 3 && (
-                    <Image
-                      src={`/image/happy.png`}
-                      alt={""}
-                      width={68}
-                      height={65}
-                    ></Image>
+                    <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
+                      <Image
+                        src={`/image/happy.png`}
+                        alt={""}
+                        width={68}
+                        height={65}
+                      ></Image>
+                      <label
+                        className="text-[16px] font-bold  text-[#D43A7B] "
+                        id="happy"
+                      >
+                        Happy
+                      </label>
+                    </div>
                   )}
                   {data?.emotion == 2 && (
-                    <Image
-                      src={`/image/everage.png`}
-                      alt={""}
-                      width={68}
-                      height={65}
-                    ></Image>
+                    <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
+                      <Image
+                        src={`/image/everage.png`}
+                        alt={""}
+                        width={68}
+                        height={65}
+                      ></Image>
+                      <label
+                        className="text-[16px] font-bold  text-[#389F2F] "
+                        id="Everage"
+                      >
+                        Everage
+                      </label>
+                    </div>
                   )}
                   {data?.emotion == 1 && (
-                    <Image
-                      src={`/image/poor.png`}
-                      alt={""}
-                      width={68}
-                      height={65}
-                    ></Image>
+                    <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">
+                      <Image
+                        src={`/image/poor.png`}
+                        alt={""}
+                        width={68}
+                        height={65}
+                      ></Image>
+                      <label
+                        className="text-[16px] font-bold  text-[#764416] "
+                        id="poor"
+                      >
+                        Poor
+                      </label>
+                    </div>
                   )}
                 </div>
               </div>

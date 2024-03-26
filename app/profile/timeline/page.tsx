@@ -6,17 +6,18 @@ import { Input } from "@/components/ui/input";
 function TimeLinePage() {
   return (
     <div className="container">
-      <div className="w-[399px] grid grid-flow-row    w-full">
-        <Image
-          className="  "
-          style={{ height: "100%", width: "100%" }}
+      <div className=" grid  grid-flow-row  justify-self-center ">
+        <div className='flex  flex-nowrap'>
+           <Image
+          className="w-[396px]"
           src="/perfectdays2/image/head.png"
-          width={0}
-          height={0}
-          alt=""
-          sizes="100vw"
-          // fill={true}
+     
+          alt={""}
+          width={5000}
+          height={214}
         ></Image>
+        </div>
+       
       </div>
       <div className="flex justify-items-center self-start">
         <Input type="date" className="w-[228px] h-[22]"></Input>

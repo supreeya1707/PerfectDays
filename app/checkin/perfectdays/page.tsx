@@ -593,26 +593,10 @@ function PerfectdaysPage() {
                         height={80}
                         // onClick={updateGPS}
                       ></Image>
-                    </div>
-                    {/* <div className="text-2xl text-center font-bold">
-                  {distance < data.organize_radius ? 1 : 2}
-                </div> */}
-                    {/* <div className="col-span-2">
-                  <div className="text-xl text-center  text-[#8F8B8B]">
-                    ห่างจากสถานที่ทำงาน : {distance}
-                  </div><
-                </div> */}
+                
                   </div>
-                  {/* <div className="text-2xl text-center font-bold">
-                {data.organize_radius}
-              </div>
-              <div className="text-2xl text-center font-bold">
-                {distance < data.organize_radius ? 1 : 2}
-              </div>
-              <label className="flex flex-col mt-2 mr-5  ">
-                your location :{data.organize_lat}
-              </label>{" "}
-              <br></br> */}
+                  </div>
+                 
                 </div>
               </div>
             )}

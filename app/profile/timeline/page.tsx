@@ -29,11 +29,12 @@ function TimeLinePage() {
   const dateNow = new Date();
   const [date, setDate] = React.useState<Date | undefined>(new Date())
   return (
-    <div className="container">
-      <div className='grid grid-cols-1 mt-3 justify-center'>
+    <div className="">
+      <div className="container">
+        <div className=" grid grid-cols-1 mt-3 justify-center">
         {/* <Input  className="justify-center text-[20px]"type="month" name='month'>
 
-      </Input> */}
+        </Input> */}
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -44,7 +45,11 @@ function TimeLinePage() {
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "MMMM ", { locale: th, }) : <span>Pick a date</span>}
+              {date ? (
+                format(date, "MMMM ", { locale: th })
+              ) : (
+                <span>Pick a date</span>
+              )}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
@@ -54,7 +59,7 @@ function TimeLinePage() {
               selected={date}
               onSelect={setDate}
               initialFocus
-            // month={new Date().getMonth()}
+              // month={new Date().getMonth()}
             />
           </PopoverContent>
         </Popover>
@@ -69,11 +74,12 @@ function TimeLinePage() {
                     .format(" MMMM ")
                   }
                 /> */}
-
-      </div>
-      <div className='row mt-5'>
-        <div className='grid grid-cols-4'>
-          <div className='grid grid-cols-1 grid-row-2'>
+        </div>
+        
+        <div className="row mt-5">
+          
+        <div className="grid grid-cols-4">
+          <div className="grid grid-cols-1 grid-row-2">
             <Image
               src="/perfectdays2/image/Group1016.png"
               alt={""}
@@ -88,7 +94,7 @@ function TimeLinePage() {
               Perfect Day
             </label>
           </div>
-          <div className='grid grid-cols-1 grid-row-2'>
+          <div className="grid grid-cols-1 grid-row-2">
             <Image
               src="/perfectdays2/image/happy.png"
               alt={""}
@@ -101,10 +107,9 @@ function TimeLinePage() {
               htmlFor="happy"
             >
               happy
-
             </label>
           </div>
-          <div className='grid grid-cols-1 grid-row-2'>
+          <div className="grid grid-cols-1 grid-row-2">
             <Image
               src="/perfectdays2/image/everage.png"
               alt={""}
@@ -117,10 +122,9 @@ function TimeLinePage() {
               htmlFor="everage"
             >
               everage
-
             </label>
           </div>
-          <div className='grid grid-cols-1 grid-row-3'>
+          <div className="grid grid-cols-1 grid-row-3">
             <Image
               src="/perfectdays2/image/poor.png"
               alt={""}
@@ -133,85 +137,103 @@ function TimeLinePage() {
               htmlFor="poor"
             >
               poor
-
             </label>
-
           </div>
-
-
         </div>
       </div>
-      <div className='row mt-3'>
-        <div className='grid grid-cols-4'>
-          <div className='grid grid-cols-1 '>
-
-            <label
-              className="text-[18px] font-bold text-black text-center "
-
-            >
+      <div className="row mt-3">
+        <div className="grid grid-cols-4">
+          <div className="grid grid-cols-1 ">
+            <label className="text-[18px] font-bold text-black text-center ">
               32
             </label>
           </div>
-          <div className='grid grid-cols-1 '>
-
-            <label
-              className="text-[18px] font-bold text-black text-center "
-
-            >
+          <div className="grid grid-cols-1 ">
+            <label className="text-[18px] font-bold text-black text-center ">
               19
             </label>
           </div>
-          <div className='grid grid-cols-1 '>
-
-            <label
-              className="text-[18px] font-bold text-black text-center "
-
-            >
+          <div className="grid grid-cols-1 ">
+            <label className="text-[18px] font-bold text-black text-center ">
               7
             </label>
           </div>
-          <div className='grid grid-cols-1 '>
-
-            <label
-              className="text-[18px] font-bold text-black text-center "
-
-            >
+          <div className="grid grid-cols-1 ">
+            <label className="text-[18px] font-bold text-black text-center ">
               1
             </label>
           </div>
         </div>
       </div>
 
+      </div>
+      
+     
+      <div className='bg-[#E7F5FF] w-full'>
 
-      <Card className='bg-[#E7F5FF] mt-5'>
-        <div className='grid grid-cols-3 '>
-          <CardHeader>
-            <CardTitle className='text-[#427486]'>วันที่</CardTitle>
-            <label className=''>
-              01 มีนาคม 2567
+<div className=" container row mt-3 ">
+        <div className="grid grid-cols-3">
+          <div className="grid grid-cols-1 ">
+            <label className="text-[18px] font-bold text-black text-start ">
+              วันที่
             </label>
-            <CardDescription>C</CardDescription>
-          </CardHeader>
-          <CardHeader>
+          </div>
+
+          <div className="grid grid-cols-1 ">
             <Image
-              className='justify-center'
+              className="justify-end"
               src="/perfectdays2/image/morning.png"
               alt=""
               width={29}
               height={22}
-            // onClick={updateGPS}
+              // onClick={updateGPS}
+            ></Image>
+          </div>
+          <div className="grid grid-cols-1 ">
+            <Image
+              className="justify-end"
+              src="/perfectdays2/image/evening.png"
+              alt=""
+              width={29}
+              height={22}
+              // onClick={updateGPS}
+            ></Image>
+          </div>
+          </div><div className="grid grid-flow-row auto-rows-max">
+            
+        </div>
+      </div>
+      </div>
+      
+      
+
+      {/* <Card className="bg-[#E7F5FF] mt-5">
+        <div className="grid grid-cols-3 ">
+          <CardHeader>
+            <CardTitle className="text-[#427486]">วันที่</CardTitle>
+            <label className="">01 มีนาคม 2567</label>
+            <CardDescription>C</CardDescription>
+          </CardHeader>
+          <CardHeader>
+            <Image
+              className="justify-center"
+              src="/perfectdays2/image/morning.png"
+              alt=""
+              width={29}
+              height={22}
+              // onClick={updateGPS}
             ></Image>
             <CardTitle>Card Title</CardTitle>
             <CardDescription>Card Description</CardDescription>
           </CardHeader>
           <CardHeader>
             <Image
-              className='justify-center'
+              className="justify-center"
               src="/perfectdays2/image/morning.png"
               alt=""
               width={29}
               height={22}
-            // onClick={updateGPS}
+              // onClick={updateGPS}
             ></Image>
             <CardTitle>Card Title</CardTitle>
             <CardDescription>Card Description</CardDescription>
@@ -224,8 +246,7 @@ function TimeLinePage() {
         <CardFooter>
           <p>Card Footer</p>
         </CardFooter>
-      </Card>
-
+      </Card> */}
     </div>
   );
 }

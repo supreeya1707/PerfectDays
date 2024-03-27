@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,17 +20,62 @@ import dayjs from 'dayjs';
 import buddhistEra from "dayjs/plugin/buddhistEra";
 import { th } from "date-fns/locale";
 import { Button } from '@/components/ui/button';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, PieChart } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
+
+import { Chart } from "chart.js";
+
+
 dayjs.extend(buddhistEra);
 function TimeLinePage() {
   const dateNow = new Date();
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
+  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  useEffect(() => {
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ["ตรงเวลา", "มาสาย"],
+            datasets: [{
+                data: [70, 10],
+                borderColor: [
+                    "#F5F5F5",
+                    "#F5F5F5",
+                    
+                ],
+                backgroundColor: [
+                    "#3B7D23",
+                    "#E97132",
+                    
+                ],
+                borderWidth: 2,
+            }]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    display: false,
+                }],
+                yAxes: [{
+                    display: false,
+                }],
+            }
+        },
+    });
+}, [])
+ 
   return (
     <div className="">
       <div className="container">
+
+      <div className="w-[1100px] h-screen flex mx-auto my-auto">
+                <div className='border border-gray-400 pt-0 rounded-xl  w-full h-fit my-auto  shadow-xl'>
+                    <canvas id='myChart'></canvas>
+                </div>
+            </div>
+        <div> <PieChart/></div>
         <div className=" grid grid-cols-1 mt-3 justify-center">
         {/* <Input  className="justify-center text-[20px]"type="month" name='month'>
 

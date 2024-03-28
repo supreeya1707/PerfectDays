@@ -68,7 +68,7 @@ function LoginPage() {
         // const dataSend = {
         //   token_line: `${profile.userId}`,
         // };
-        router.push("/checkin/perfectdays?cid=" + res.data.message.cid);
+        router.push("/profile/perfectdays?cid=" + res.data.message.cid);
       } else {
         Swal.fire({
           icon: "error",

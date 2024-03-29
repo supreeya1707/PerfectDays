@@ -57,6 +57,7 @@ function LoginPage() {
       // lineid:lineid
     });
     console.log("res login : ", res.data);
+    console.log("res data : ", res.data);
     if (res.data.ok) {
       console.log("resOK", res.data.message);
       if (res.data.message.cid) {
@@ -68,7 +69,7 @@ function LoginPage() {
         // const dataSend = {
         //   token_line: `${profile.userId}`,
         // };
-        router.push("/profile/perfectdays?cid=" + res.data.message.cid);
+        router.push("/profile/timeline?lineid=" + lineId);
       } else {
         Swal.fire({
           icon: "error",

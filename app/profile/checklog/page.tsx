@@ -9,7 +9,7 @@ import { InfinitySpin } from 'react-loader-spinner';
 function ChecklogPage() {
     const router = useRouter(); 
     const pathUrl: any = process.env.pathUrl;
-    const idcardliff: any = process.env.idcardliff;
+    const profileliff: any = process.env.profileliff;
 
     const [os, setOs] = useState<string>();
     
@@ -22,7 +22,7 @@ function ChecklogPage() {
        const initLiff = async () => {
          liff.use(new GetOS());
          setOs(liff.getOS());
-         await liff.init({ liffId: idcardliff }).then(async () => {
+         await liff.init({ liffId: profileliff }).then(async () => {
            if (!liff.isLoggedIn()) {
              liff.login();
            } else {
@@ -39,28 +39,23 @@ function ChecklogPage() {
                token_line: `${profile.userId}`,
              };
 
-            
              const checkLineId = await axios.get(
-               `${pathUrl}/worker/checkline/${profile.userId }`
+               `${pathUrl}/worker/checkline/${profile.userId}`
              );
              console.info(checkLineId.data);
              console.log("res2", checkLineId.data);
-             console.log('checkLineId', checkLineId)
-               if (checkLineId.data.message.length > 0) {
-                 const stafftype = checkLineId.data.message[0];
-                   setCheckuser(true);
-                   setUser(checkLineId.data[0]);
-                   //    rout to page checkin...
-                  router.replace(
-                    "/profile/login?cid=" + checkLineId.data.message[0].cid
-                  );
-                //  console.log("check CID", checkLineId.data.message[0].cid);
-                   
-               } else {
-                  //  router.push("/checkin/login?lineid="+profile.userId);
-                   setCheckuser(false);
-               }
-             
+             console.log("checkLineId", checkLineId);
+             if (checkLineId.data.message.length > 0) {
+               const stafftype = checkLineId.data.message[0];
+               setCheckuser(true);
+               setUser(checkLineId.data[0]);
+               //    rout to page checkin...
+               router.replace("/profile/timeline?lineid=" + profile.userId);
+               //  console.log("check CID", checkLineId.data.message[0].cid);
+             } else {
+               router.push("/profile/login?lineid=" + profile.userId);
+               setCheckuser(false);
+             }
            }
          });
          await liff.ready;

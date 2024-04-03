@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import {
@@ -21,37 +21,72 @@ import "dayjs/locale/th";
 import buddhistEra from "dayjs/plugin/buddhistEra";
 import { th } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Divide } from "lucide-react";
 // import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { format, getYear } from "date-fns";
+import { format, getDate, getYear } from "date-fns";
 import { Label } from "@radix-ui/react-label";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { Calendar } from "primereact/calendar";
-import { DatePicker, DatePickerProps, Space } from "antd";
+import { ConfigProvider, DatePicker, DatePickerProps, Space } from "antd";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import thai from "antd/es/date-picker/locale/th_TH";
+import thaiTh from "antd/es/locale/th_TH";
+import { ThemeProvider, createMuiTheme } from "@mui/material";
+import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
+import { createTheme } from "@mui/material/styles";
+import { Kanit } from "next/font/google";
+import { fontFamily } from "@mui/system";
+// import { DefaultizedPieValueType } from "@mui/x-charts";
+// dayjs.extend(customParseFormat);
 
+
+const inter = Kanit({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  adjustFontFallback: false,
+});
 
 const pathUrl: any = process.env.pathUrl;
 dayjs.extend(buddhistEra);
-const dataMonth: any = {
-  "01": "มกราคม",
-  "02": "กุมภาพันธ์",
-  "03": "มีนาคม",
-  "04": "เมษายน",
-  "05": "พฤษภาคม",
-  "06": "มิถุนายน",
-  "07": "กรกฎาคม",
-  "08": "สิงหาคม",
-  "09": "กันยายน",
-  "10": "ตุลาคม",
-  "11": "พฤศจิกายน",
-  "12": "ธันวาคม",
-};
+
 const yearini = 2023;
 const onChange: DatePickerProps["onChange"] = (date, dateString) => {
   console.log(date, dateString);
 };
+
+const buddhistLocale: typeof thai = {
+  ...thai,
+  lang: {
+    ...thai.lang,
+    fieldDateFormat: "BBBB-MM-DD",
+    fieldDateTimeFormat: "BBBB-MM-DD HH:mm:ss",
+    yearFormat: "BBBB",
+    cellYearFormat: "BBBB",
+  },
+};
+const globalBuddhistLocale: typeof thaiTh = {
+  ...thaiTh,
+  DatePicker: {
+    ...thaiTh.DatePicker!,
+    lang: buddhistLocale.lang,
+  },
+};
+
+const sizing = {
+  margin: { right: 0 },
+  width: 180,
+  height: 180,
+  legend: { hidden: true },
+};
+
+// const getArcLabel = (params: DefaultizedPieValueType) => {
+//   const percent = params.value / TOTAL;
+//   return `${(percent * 100).toFixed(0)}%`;
+// };
+
 function TimeLinePage() {
   const dateNow = new Date();
   const [date, setDate] = React.useState<Date | undefined>(new Date());
@@ -62,17 +97,29 @@ function TimeLinePage() {
   const [emotinEverage, setEmotinEverage] = React.useState(0);
   const [emotinPoor, setEmotinPoor] = React.useState(0);
   const [dataYear, setDataYear] = React.useState<any>([]);
+  const [dateInput, setdateInput] = React.useState<any>(dayjs());
+  const [dataDate, setDatadate] = useState(new Date());
+  const [year, setyear] = React.useState<any>(dayjs().year());
+  const [month, setmonth] = React.useState<any>(dayjs().month() + 1);
+  const [startDate, setStartDate] = useState(new Date());
+  const [loading, setLoading] = useState(true);
+  const [summarize, setsummarize] = React.useState([]);
+  const [dataAllTime, setdataAllTime] = React.useState<any>(0);
+  const [dataOnTime, setdataOnTime] = React.useState<any>(0);
+  const [dataLateTime, setdataLateTime] = React.useState<any>(0);
   console.log(datalog);
   const pathUrl: any = process.env.pathUrl;
   const searchParams = useSearchParams();
   const lineid = searchParams.get("lineid");
-  const monthFormat = "MMMM YYYY";
+  const monthFormat = "MMMM BBBB";
 
   const getData = async () => {
+    setLoading(true);
     const res = await axios.get(
-      `${pathUrl}/perfectdays/profile/03/2024/${lineid}`
+      `${pathUrl}/perfectdays/profile/${month}/${year}/${lineid}`
     );
-    console.log("res", res.data);
+
+    console.log("res", res);
     setDatalog(res.data.message);
     const perfect = res.data.message.filter((v: any) => {
       if (v.emotion == 4) {
@@ -94,16 +141,93 @@ function TimeLinePage() {
         return v;
       }
     });
+
+    const lateTime = res.data.message.filter((v: any) => {
+      if (v.clockin > "08:20") {
+        return v;
+      }
+    }).length;
+
+    const onTime = res.data.message.filter((v: any) => {
+      if (v.clockin <= "08:20") {
+        return v;
+      }
+    }).length;
+
+    const allTime = res.data.message.length;
+    setdataAllTime(allTime);
+    setdataLateTime(lateTime);
+    setdataOnTime(onTime);
     console.log("happy", happy);
     setEmotinPerfect(perfect.length);
     setEmotinHappy(happy.length);
     setEmotinEverage(everage.length);
     setEmotinPoor(poor.length);
     console.log("datalog: " + datalog);
+    setLoading(false);
   };
+
+  const getData2 = async (dmonth: any, dyear: any) => {
+    setLoading(true);
+    const res = await axios.get(
+      `${pathUrl}/perfectdays/profile/${dmonth}/${dyear}/${lineid}`
+    );
+
+    console.log("res", res);
+    setDatalog(res.data.message);
+    //check emotion when user click
+    const perfect = res.data.message.filter((v: any) => {
+      if (v.emotion == 4) {
+        return v;
+      }
+    });
+    const happy = res.data.message.filter((v: any) => {
+      if (v.emotion == 3) {
+        return v;
+      }
+    });
+    const everage = res.data.message.filter((v: any) => {
+      if (v.emotion == 2) {
+        return v;
+      }
+    });
+    const poor = res.data.message.filter((v: any) => {
+      if (v.emotion == 1) {
+        return v;
+      }
+    });
+
+    const lateTime = res.data.message.filter((v: any) => {
+      if (v.clockin > "09:00") {
+        return v;
+      }
+    }).length;
+
+    const onTime = res.data.message.filter((v: any) => {
+      if (v.clockin <= "09:00") {
+        return v;
+      }
+    }).length;
+
+    const allTime = res.data.message.length;
+    setdataAllTime(allTime);
+    setdataLateTime(lateTime);
+    setdataOnTime(onTime);
+    console.log("lateTime", lateTime);
+    console.log("onTime", onTime);
+    console.log("allTime", allTime);
+    console.log("happy", happy);
+    setEmotinPerfect(perfect.length);
+    setEmotinHappy(happy.length);
+    setEmotinEverage(everage.length);
+    setEmotinPoor(poor.length);
+    console.log("datalog: " + datalog);
+    setLoading(false);
+  };
+
   useEffect(() => {
     const yy: any = [];
-    for (let i = yearini; i <= dayjs().year(); i++){
+    for (let i = yearini; i <= dayjs().year(); i++) {
       const getyear: any = {};
       getyear.value = i;
       getyear.label = i + 543;
@@ -111,10 +235,30 @@ function TimeLinePage() {
     }
     console.log(yy);
     setDataYear(yy);
+
     getData();
   }, []);
 
-  console.log(dayjs().month());
+  //chang value in calendar
+  const onChange: DatePickerProps["onChange"] = async (date, dateString) => {
+    await setdateInput(date);
+    await setyear(dayjs(date).year());
+    await setmonth(dayjs(date).month() + 1);
+    console.log("date", dayjs(date).format("MM").toString());
+    console.log("1", dayjs(date).month() + 1);
+    console.log("dateString", dateString);
+    await getData2(dayjs(date).month() + 1, dayjs(date).year());
+  };
+
+  console.log("DateNow", dateInput);
+  console.log("year", year);
+  console.log("month", month);
+  const theme = createTheme({
+    typography: {
+      fontFamily: ["Kanit"].join(","),
+    },
+  });
+ 
   return (
     <div className="">
       <div className=" grid grid grid-flow-row auto-rows-max justify-self-center content-start">
@@ -127,62 +271,101 @@ function TimeLinePage() {
         ></Image>
       </div>
       <div className="container">
-        <div className=" grid grid-cols-1 mt-3 justify-center">
-          {/* <Input  className="justify-center text-[20px]"type="month" name='month'>
-
-        </Input> */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-full justify-center text-center font-[22px]",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? (
-                  format(date, "MMMM ", { locale: th })
-                ) : (
-                  <span>Pick a date</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              {/* <Calendar
-                // month={date}
-                mode="single"
-                locale={th}
-                // captionLayout="dropdown-buttons"
-                selected={date}
-                onSelect={setDate}
-                initialFocus
-                fromYear={2024}
-                toYear={2040}
-                // month={new Date().getMonth()}
-              /> */}
-            </PopoverContent>
-          </Popover>
-
-          {/* <Input
-                  className=" justify-center text-[20px] text-[#417988]"
-                  type="month"
-                  
-                  value={dayjs(date)
-                    // .add(543, "year")
-                    // .locale("th")
-                    .format(" MMMM ")
-                  }
-                /> */}
+        <div className=" flex flex-col mt-3">
+          <ConfigProvider
+            locale={globalBuddhistLocale}
+            theme={{
+              token: {
+                fontFamily: "${inter.className}",
+                fontSize: 18,
+                colorPrimary: "#417988",
+                controlHeight: 38,
+              },
+            }}
+          >
+            <DatePicker
+              className={`border-[#417988] ${inter.className}`}
+              defaultValue={dateInput}
+              value={dateInput}
+              format={monthFormat}
+              locale={buddhistLocale}
+              onChange={onChange}
+              picker="month"
+            />
+          </ConfigProvider>
         </div>
-        {/* <div className="grid grid-cols-1 mt-3 justify-center">
-          {" "}
-          <DatePicker
-            defaultValue={dayjs(date).add(543, "year").monthFormat()}
-            onChange={onChange}
-            picker="month"
-          />
-        </div> */}
+        <div className="flex flex-col mt-3">
+          <div className="flex flex-row justify-around items-stretch">
+            <div className="basis-4/6  justify-center">
+              <ThemeProvider theme={theme}>
+                <PieChart
+                  series={[
+                    {
+                      data: [
+                        {
+                          value:
+                            dataOnTime === null
+                              ? 0
+                              : Number(
+                                  ((dataOnTime / dataAllTime) * 100).toFixed(2)
+                                ),
+                          // label: "ตรงเวลา",
+                        },
+                        {
+                          value:
+                            dataLateTime === null
+                              ? 0
+                              : Number(
+                                  ((dataLateTime / dataAllTime) * 100).toFixed(
+                                    2
+                                  )
+                                ),
+                          // label: "มาสาย",
+                        },
+                      ],
+                      arcLabel: (item) => `${item.value} %`,
+                      highlightScope: { faded: "global", highlighted: "item" },
+                      faded: {
+                        innerRadius: 30,
+                        additionalRadius: -30,
+                        color: "gray",
+                      },
+                    },
+                  ]}
+                  sx={{
+                    [`& .${pieArcLabelClasses.root}`]: {
+                      fill: "white",
+                      fontSize: 14,
+                    },
+                  }}
+                  colors={["#3B7D23", "#E97132"]}
+                  {...sizing}
+                />
+              </ThemeProvider>
+            </div>
+            <div className="basis-2/6  text-start self-center">
+              <div className="">
+                <div className="flex flex-row">
+                  <div className="w-3/4  text-end ">วันทั้งหมด</div>
+                  <div className="w-1/4  text-center">{dataAllTime}</div>
+                </div>
+                <div className="flex flex-row">
+                  <div className="w-[14px] h-[14px] rounded-full items-baseline mt-1 bg-[#3B7D23]"></div>
+                  <div className="w-3/4 pl-2  text-start ">ตรงเวลา</div>
+                  <div className="w-1/4  text-center">{dataOnTime}</div>
+                </div>
+                <div className="flex flex-row">
+                  <div className="w-[14px] h-[14px] rounded-full items-baseline mt-1 bg-[#E97132]"></div>
+                  <div className="w-3/4  pl-2 text-start ">มาสาย</div>
+                  <div className="w-1/4  text-center">{dataLateTime}</div>
+                </div>
+              </div>
+              <div className=""></div>
+              <div className=""></div>
+            </div>
+          </div>
+        </div>
+
         <div className="row mt-5 w-full">
           <div className="grid grid-cols-4">
             <div className="grid grid-cols-1 grid-row-2">
@@ -276,7 +459,7 @@ function TimeLinePage() {
         </div>
       </div>
 
-      <div className="bg-[#E7F5FF] w-full mt-3 pb-3">
+      <div className="bg-[#E7F5FF] w-full mt-3 pb-3 h-[500px] max-h-svh hover:max-h-screen">
         <div className="container">
           <div className="flex flex-col">
             <div className="flex flex-row items-center py-3 justify-center">
@@ -308,28 +491,39 @@ function TimeLinePage() {
                 </div>
               </div>
             </div>
-            {datalog.map((v: any, index: any) => {
-              return (
-                <div className="flex flex-row items-center mt-1" key={index}>
-                  <div className="  text-black  basis-1/3 text-center">
-                    {dayjs(v.work_date)
-                      .locale("th")
-                      .add(543, "years")
-                      .format("DD-MM-YYYY")}
-                  </div>
-                  <div className="basis-1/3">
-                    <div className="flex flex-row justify-center">
-                      {v.clockin.toString().substring(0, 5)}
+            {loading ? (
+              <div className="text-center">Loading..</div>
+            ) : (
+              <div>
+                {datalog.map((v: any, index: any) => {
+                  return (
+                    <div
+                      className="flex flex-row items-center mt-1"
+                      key={index}
+                    >
+                      <div className="  text-black  basis-1/3 text-center">
+                        {dayjs(v.work_date)
+                          .locale("th")
+                          .add(543, "years")
+                          .format("DD MMM YYYY")}
+                      </div>
+                      <div className="basis-1/3">
+                        <div className="flex flex-row justify-center">
+                          {v.clockin.toString().substring(0, 5)}
+                        </div>
+                      </div>
+                      <div className="basis-1/3">
+                        <div className="flex flex-row justify-center">
+                          {v.clockout
+                            ? v.clockout.toString().substring(0, 5)
+                            : ""}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="basis-1/3">
-                    <div className="flex flex-row justify-center">
-                      {v.clockout ? v.clockout.toString().substring(0, 5) : ""}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>

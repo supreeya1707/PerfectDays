@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 "use client";
 import React, { useEffect, useState } from "react";
+=======
+"use client"
+import React, { useEffect } from 'react'
+>>>>>>> 2f374790c11daef3f969a228f7abaf2fac5804ba
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,6 +25,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/th";
 import buddhistEra from "dayjs/plugin/buddhistEra";
 import { th } from "date-fns/locale";
+<<<<<<< HEAD
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, Divide } from "lucide-react";
 // import { Calendar } from "@/components/ui/calendar";
@@ -50,6 +56,17 @@ const inter = Kanit({
 });
 
 const pathUrl: any = process.env.pathUrl;
+=======
+import { Button } from '@/components/ui/button';
+import { CalendarIcon, PieChart } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { cn } from "@/lib/utils"
+import { format } from "date-fns"
+
+import { Chart } from "chart.js";
+
+
+>>>>>>> 2f374790c11daef3f969a228f7abaf2fac5804ba
 dayjs.extend(buddhistEra);
 
 const yearini = 2023;
@@ -90,6 +107,7 @@ const sizing = {
 function TimeLinePage() {
   const dateNow = new Date();
   const [date, setDate] = React.useState<Date | undefined>(new Date());
+<<<<<<< HEAD
   const [datalog, setDatalog] = React.useState([]);
   const [count, setCount] = React.useState([]);
   const [emotinPerfect, setEmotinPerfect] = React.useState(0);
@@ -258,6 +276,41 @@ function TimeLinePage() {
       fontFamily: ["Kanit"].join(","),
     },
   });
+=======
+  useEffect(() => {
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ["ตรงเวลา", "มาสาย"],
+            datasets: [{
+                data: [70, 10],
+                borderColor: [
+                    "#F5F5F5",
+                    "#F5F5F5",
+                    
+                ],
+                backgroundColor: [
+                    "#3B7D23",
+                    "#E97132",
+                    
+                ],
+                borderWidth: 2,
+            }]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    display: false,
+                }],
+                yAxes: [{
+                    display: false,
+                }],
+            }
+        },
+    });
+}, [])
+>>>>>>> 2f374790c11daef3f969a228f7abaf2fac5804ba
  
   return (
     <div className="">
@@ -271,6 +324,7 @@ function TimeLinePage() {
         ></Image>
       </div>
       <div className="container">
+<<<<<<< HEAD
         <div className=" flex flex-col mt-3">
           <ConfigProvider
             locale={globalBuddhistLocale}
@@ -291,6 +345,44 @@ function TimeLinePage() {
               locale={buddhistLocale}
               onChange={onChange}
               picker="month"
+=======
+
+      <div className="w-[1100px] h-screen flex mx-auto my-auto">
+                <div className='border border-gray-400 pt-0 rounded-xl  w-full h-fit my-auto  shadow-xl'>
+                    <canvas id='myChart'></canvas>
+                </div>
+            </div>
+        <div> <PieChart/></div>
+        <div className=" grid grid-cols-1 mt-3 justify-center">
+        {/* <Input  className="justify-center text-[20px]"type="month" name='month'>
+
+        </Input> */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={cn(
+                "w-[280px] justify-center text-center font-[20px]",
+                !date && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {date ? (
+                format(date, "MMMM ", { locale: th })
+              ) : (
+                <span>Pick a date</span>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              locale={th}
+              selected={date}
+              onSelect={setDate}
+              initialFocus
+              // month={new Date().getMonth()}
+>>>>>>> 2f374790c11daef3f969a228f7abaf2fac5804ba
             />
           </ConfigProvider>
         </div>

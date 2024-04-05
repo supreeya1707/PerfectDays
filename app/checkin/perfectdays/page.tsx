@@ -306,6 +306,7 @@ function PerfectdaysPage() {
                 height={135}
               ></Image>
             </div>
+
             <div className=" grid grid grid-flow-row auto-rows-max justify-self-center  ">
               {/* <div className=" grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1  items-center"> */}
               <div className="textdescrip text-2xl mt-2">
@@ -317,14 +318,14 @@ function PerfectdaysPage() {
               </div>
 
               {data.clockin != null ? (
-                <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1  justify-self-center ">
                   <div className=" flex items-center justify-center    border-4 rounded-lg p-2  border-[#3956BF] w-[220px] h-[49px]">
                     <label className="text-center  text-[40px] text-[#3956BF] ">
                       {data?.clockin?.toString().substring(0, 5)}
                     </label>
                   </div>
                   {data.clockout != null ? (
-                    <div className="mt -3 grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
+                    <div className="mt -3 grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center ">
                       <div className="mt-5 flex items-center justify-center    border-4 rounded-lg p-2  border-[#2A6417] w-[220px] h-[49px]">
                         <label className="text-center  text-[40px] text-[#2A6417] ">
                           {data.clockout?.toString().substring(0, 5)}
@@ -332,9 +333,9 @@ function PerfectdaysPage() {
                       </div>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center ">
                       {distance < data.organize_radius ? (
-                        <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6 mt-2">
+                        <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mt-2">
                           <Button
                             className="border-4 bg-[#056839] border-gray w-[178px] h-[58px] rounded-lg text-lg  "
                             onClick={upsData}
@@ -343,7 +344,7 @@ function PerfectdaysPage() {
                           </Button>
                         </div>
                       ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
+                        <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center ">
                           <Button className="border-4 bg-[#DFE0E1] border-white w-[178px] h-[58px] rounded-lg text-lg disabled:true ">
                             OUT OF RANGE
                           </Button>
@@ -351,6 +352,14 @@ function PerfectdaysPage() {
                       )}
                     </div>
                   )}
+                  <div className="mt-3 mb-6">
+                    <div
+                      className="text-[16px]  text-start
+                    text-[#8F8B8B] "
+                    >
+                      ห่างจากสถานที่ทำงาน : {Math.round(distance)} เมตร
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
@@ -364,7 +373,7 @@ function PerfectdaysPage() {
                       </Button>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center">
                       <Button className="border-4 bg-[#DFE0E1] border-white w-[178px] h-[58px] rounded-lg text-lg disabled:true ">
                         OUT OF RANGE
                       </Button>
@@ -557,69 +566,29 @@ function PerfectdaysPage() {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-rows-2 grid-flow-col gap-4 justify-items-center ">
-                <div className="grid grid-cols-1  justify-items-center  mt-10">
-                  <div className="justify-self-center ml-10 text-4xl">
-                    {hours}:{minutes}:{seconds}
-                  </div>
-                  <div className="grid grid-rows-3 grid-flow-col gap-4  ">
-                    {/* <div className="col-start-2 col-span-4 ...">01</div> */}
-                    <div className="col-span-2  ">
-                      <div className="text-[16px] text-center mt-3 text-[#8F8B8B]">
-                        Location : {parseFloat(data.organize_lat).toFixed(15)}
-                      </div>
-                    </div>
-                    <div className=" col-span-4 ">
-                      <div
-                        className="text-[16px]  text-start
-                    text-[#8F8B8B]"
-                      >
-                        ห่างจากสถานที่ทำงาน : {Math.round(distance)} เมตร
-                      </div>
-                    </div>
-                    <div className=" col-span-2 ">
-                      <Button
-                        className="bg-[#30485E] text-[16px] w-[214px] h-[40px] "
-                        onClick={() => initial()}
-                      >
-                        UPDATE พิกัดอีกครั้ง
-                      </Button>
-                    </div>
-                    <div className="row-span-3  ">
-                      <Image
-                        src="/perfectdays2/image/destination.png"
-                        alt=""
-                        width={80}
-                        height={80}
-                        // onClick={updateGPS}
-                      ></Image>
-                
-                  </div>
-                  </div>
-                 
+             
+                    <div className="flex flex-col items-center mt-10">
+                      <div className="flex flex-row">
+                         <div className="justify-self-center  text-4xl">
+                             {hours}:{minutes}:{seconds}
                 </div>
+                      </div>
+               
+              
+                    <div className="flex flex-col items-center mt-5">
+                      <div className="flex flex-row">
+                         <Button
+                      className="bg-[#30485E] text-[16px] w-[321px]  "
+                      onClick={() => initial()}
+                    >
+                      UPDATE พิกัดอีกครั้ง
+                    </Button>
+                      </div>
+               
               </div>
+                  </div>
             )}
           </div>
-
-          {/* <div className="grid grid-rows-2 grid-flow-col gap-4 justify-items-center ">
-            <div className="flex flex-col  justify-items-center my-[620px] ">
-              <div className="justify-center ml-10">
-                <Clock time={now.getTime()} />
-              </div>
-              <div className="text-2xl text-center font-bold">{distance} m</div>
-              <div className="text-2xl text-center font-bold">
-                {data.organize_radius}
-              </div>
-              <div className="text-2xl text-center font-bold">
-                {distance < data.organize_radius ? 1 : 2}
-              </div>
-              <label className="flex flex-col mt-2 mr-5  ">
-                your location :{data.organize_lat}
-              </label>{" "}
-              <br></br>
-            </div>
-          </div> */}
         </div>
       )}
     </>

@@ -305,7 +305,18 @@ function PerfectdaysPage() {
                 width={130}
                 height={135}
               ></Image>
-            </div>
+              </div>
+              {/* ปุ่ม flip เพื่อพลิกด้านหลัง */}
+            {/* <div className="absolute  -bottom-2 right-2 ">
+              <Image
+                className="mt-2 cursor-pointer"
+                // src="/image/personal w.png"
+                src="/perfectdays2/image/repeat.png"
+                alt={""}
+                width={58}
+                height={58}
+              ></Image>
+            </div> */}
 
             <div className=" grid grid grid-flow-row auto-rows-max justify-self-center  ">
               {/* <div className=" grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1  items-center"> */}
@@ -566,27 +577,24 @@ function PerfectdaysPage() {
                 </div>
               </div>
             ) : (
-             
-                    <div className="flex flex-col items-center mt-10">
-                      <div className="flex flex-row">
-                         <div className="justify-self-center  text-4xl">
-                             {hours}:{minutes}:{seconds}
+              <div className="flex flex-col items-center mt-10">
+                <div className="flex flex-row">
+                  <div className="justify-self-center  text-4xl">
+                    {hours}:{minutes}:{seconds}
+                  </div>
                 </div>
-                      </div>
-               
-              
-                    <div className="flex flex-col items-center mt-5">
-                      <div className="flex flex-row">
-                         <Button
+
+                <div className="flex flex-col items-center mt-5">
+                  <div className="flex flex-row">
+                    <Button
                       className="bg-[#30485E] text-[16px] w-[321px]  "
                       onClick={() => initial()}
                     >
                       UPDATE พิกัดอีกครั้ง
                     </Button>
-                      </div>
-               
-              </div>
                   </div>
+                </div>
+              </div>
             )}
           </div>
         </div>

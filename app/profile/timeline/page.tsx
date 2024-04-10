@@ -149,13 +149,13 @@ function TimeLinePage() {
     });
 
     const lateTime = res.data.message.filter((v: any) => {
-      if (v.clockin > "08:20") {
+      if (v.clockin > "09:00") {
         return v;
       }
     }).length;
 
     const onTime = res.data.message.filter((v: any) => {
-      if (v.clockin <= "08:20") {
+      if (v.clockin <= "09:00") {
         return v;
       }
     }).length;
@@ -164,6 +164,7 @@ function TimeLinePage() {
     setdataAllTime(allTime);
     setdataLateTime(lateTime);
     setdataOnTime(onTime);
+    console.log("onTime: " + dataOnTime);
     console.log("happy", happy);
     setEmotinPerfect(perfect.length);
     setEmotinHappy(happy.length);
@@ -220,7 +221,7 @@ function TimeLinePage() {
     setdataLateTime(lateTime);
     setdataOnTime(onTime);
     console.log("lateTime", lateTime);
-    console.log("onTime", onTime);
+    console.log("onTime", dataOnTime);
     console.log("allTime", allTime);
     console.log("happy", happy);
     setEmotinPerfect(perfect.length);

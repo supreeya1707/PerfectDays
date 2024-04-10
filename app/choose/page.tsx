@@ -19,8 +19,8 @@ function ChoosePage() {
             height={48}
           ></Image>
         </div>
-        <div className="grid grid-rows-4 auto-rows-min gap-y-2 justify-center content-start">
-          <div className="">
+        <div className="flex flex-col justify-items-center ">
+          <div className=" flex flex-row ">
             <Button className="border-4 rounded-lg bg-[#531805] border-white w-[228px] h-[56px] text-lg">
               Ext. CLOCK IN
             </Button>
@@ -42,6 +42,7 @@ function ChoosePage() {
           </div>
         </div>
       </div>
+      <div className="grid grid-rows-4 auto-rows-min gap-y-2 justify-center content-start"></div>
       <div className=" place-self-end">
         <Image
           src="/perfectdays2/image/repeat 1.png"

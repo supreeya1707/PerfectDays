@@ -9,6 +9,7 @@ import { InfinitySpin } from 'react-loader-spinner';
 function ChecklogPage() {
     const router = useRouter(); 
     const pathUrl: any = process.env.pathUrl;
+    // const idcardliff: any = process.env.lifftest;
     const idcardliff: any = process.env.idcardliff;
 
     const [os, setOs] = useState<string>();
@@ -52,12 +53,12 @@ function ChecklogPage() {
                    setUser(checkLineId.data[0]);
                    //    rout to page checkin...
                   router.replace(
-                    "/checkin/perfectdays?cid=" + checkLineId.data.message[0].cid
+                    "/checkin/perfectdays?cid=" + checkLineId.data.message[0].cid + "&lineid=" + profile.userId
                   );
                 //  console.log("check CID", checkLineId.data.message[0].cid);
                    
                } else {
-                   router.push("/checkin/login?lineid="+profile.userId);
+                   router.push("/checkin/login?lineid="+profile.userId );
                    setCheckuser(false);
                }
              

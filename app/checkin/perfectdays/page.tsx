@@ -20,6 +20,8 @@ function PerfectdaysPage(props:any) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const cid = searchParams.get("cid");
+  const lineID = searchParams.get("lineid");
+  console.log(lineID);
   console.log(cid);
   const pathUrl: any = process.env.pathUrl;
   const [lat1, setLat1] = useState<any>({});
@@ -82,6 +84,7 @@ function PerfectdaysPage(props:any) {
       // const idToken=liff.getIdToken();
       console.log("Profile", profile);
       setProfile(profile);
+      setLineId(profile?.userId);
       setLineId(profile?.userId);
       console.warn(lineId);
     });
@@ -243,9 +246,11 @@ function PerfectdaysPage(props:any) {
       getData();
     }
   };
-  console.log("")
+  console.log("LINE"+lineId)
   const Flipback = async () => {
-    router.push('/checkin/choose?cid='+ cid)
+    router.push(
+      "/checkin/choose?cid=" + cid + "&lineid=" + lineID 
+    );
   }
   return (
     <>

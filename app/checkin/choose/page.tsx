@@ -7,6 +7,7 @@ import { setInterval } from "timers";
 import { useRouter, useSearchParams } from "next/navigation";
 // import frontcard from "@/app/choose/components/frontcard"
 import PerfectdaysPage from "../perfectdays/page";
+import Extclockpage from "../Extclock/page";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";
 
@@ -26,15 +27,16 @@ import { Copy } from "lucide-react";
 function ChoosePage() {
   const searchParams = useSearchParams();
    const cid = searchParams.get("cid");
+   const lineID = searchParams.get("lineid");
   const data = {cid: '1329900007811', name: 'mikung'}
   const router = useRouter(); 
   console.log("CID",cid);
   const getlinkcheckin = async () => {
-    // router.push("/checkin/login");
+    // router.push("/checkin/Extclock");
 
   };
    const Flipback = async () => {
-     router.replace("/checkin/perfectdays");
+     router.replace("/checkin/perfectdays?cid="+cid+"&lineid="+lineID);
    };
   return (
     <div className="containner ">
@@ -59,13 +61,16 @@ function ChoosePage() {
                   Ext. CLOCK IN
                 </Button>
               </DialogTrigger>
-              <DialogContent className="">
+              <DialogContent className="h-[1500px]">
                 <DialogHeader>
                   <DialogTitle>Edit profile</DialogTitle>
                 </DialogHeader>
-                <div className="  ">
-                  <PerfectdaysPage mikung={cid} />
-                </div>
+                <Extclockpage/>
+                {/* <div className=" bg-local bgImgback grid grid-cols-1 "></div> */}
+                {/* <div className="  "> */}
+
+                {/* <PerfectdaysPage mikung={cid} /> */}
+                {/* </div> */}
               </DialogContent>
             </div>
             <div className="mt-1">

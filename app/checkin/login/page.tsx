@@ -69,7 +69,7 @@ function LoginPage() {
         // const dataSend = {
         //   token_line: `${profile.userId}`,
         // };
-        router.push("/checkin/perfectdays?cid=" + res.data.message.cid );
+        router.push("/checkin/perfectdays?cid=" + res.data.message.cid +"&lineid=" + lineid);
       }
       else {
         Swal.fire({

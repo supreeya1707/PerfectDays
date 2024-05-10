@@ -6,11 +6,12 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Swal from "sweetalert2";
 import { InfinitySpin } from 'react-loader-spinner';
+import { usePatientStore } from '@/app/store';
 function ChecklogPage() {
     const router = useRouter(); 
     const pathUrl: any = process.env.pathUrl;
     const profileliff: any = process.env.profileliff;
-
+    const updatePatient: any = usePatientStore((state: any) => state.updatePatient);
     const [os, setOs] = useState<string>();
     
     const [profile, setProfile] = useState<any>({});

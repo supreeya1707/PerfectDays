@@ -24,11 +24,21 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Copy } from "lucide-react";
+import liff from "@line/liff";
+import axios from "axios";
+
+
 function ChoosePage() {
+   const pathUrl: any = process.env.pathUrl;
   const searchParams = useSearchParams();
    const cid = searchParams.get("cid");
-   const lineID = searchParams.get("lineid");
-  const data = {cid: '1329900007811', name: 'mikung'}
+  const lineID = searchParams.get("lineid");
+  const idcardliff: any = process.env.idcardliff;
+   const [data, setData] = useState<any>({});
+   const [lineId, setLineId] = useState("");
+  const [profile, setProfile] = useState<any>({});
+   const [image, setimage] = useState("");
+  // const data = {cid: '1329900007811', name: 'mikung'}
   const router = useRouter(); 
   console.log("CID",cid);
   const getlinkcheckin = async () => {
@@ -37,7 +47,34 @@ function ChoosePage() {
   };
    const Flipback = async () => {
      router.replace("/checkin/perfectdays?cid="+cid+"&lineid="+lineID);
-   };
+  };
+  const getProfile = async () => {
+    await liff.init({ liffId: idcardliff }).then(async () => {
+      const profile = await liff.getProfile();
+
+      // const idToken=liff.getIdToken();
+      console.log("Profile", profile);
+      setProfile(profile);
+      setLineId(profile?.userId);
+      setLineId(profile?.userId);
+      console.warn(lineId);
+    });
+    await liff.ready;
+    setimage(profile.pictureUrl);
+  };
+  const getData = async () => {
+    const res = await axios.get(`${pathUrl}/worker/getdataworker/${cid}`);
+    console.log(res.data);
+    if (res.data.ok) {
+      setData(res.data.message[0]);
+      // setDistance(distance)
+      // console.log("ระยะห่าง", distance);
+    }
+  };
+  useEffect(() => { 
+    getProfile();
+  })
+
   return (
     <div className="containner ">
       <div className="bg-local  bgImgback grid grid-cols-1">

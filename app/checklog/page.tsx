@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Swal from "sweetalert2";
 import { InfinitySpin } from 'react-loader-spinner';
+import { usePatientStore } from '../store';
 function ChecklogPage() {
     const router = useRouter(); 
     const pathUrl: any = process.env.pathUrl;
@@ -18,7 +19,10 @@ function ChecklogPage() {
     const [lineId, setLineId] = useState("");
     const [User, setUser] = useState("");
      const [loading, setLoading] = useState(true);
-     const [checkUser, setCheckuser] = useState(true);
+  const [checkUser, setCheckuser] = useState(true);
+   const updatePatient: any = usePatientStore(
+     (state: any) => state.updatePatient
+   );
      useEffect(() => {
        const initLiff = async () => {
          liff.use(new GetOS());
@@ -50,7 +54,10 @@ function ChecklogPage() {
                if (checkLineId.data.message.length > 0) {
                  const stafftype = checkLineId.data.message[0];
                    setCheckuser(true);
-                   setUser(checkLineId.data[0]);
+                 setUser(checkLineId.data[0]);
+                 updatePatient(checkLineId.data.message[0]);
+                 console.log('userPatient', updatePatient);
+                //  updatedata(checkLineId.data.message[0], `${profile.userId}`);
                    //    rout to page checkin...
                   router.replace(
                     "/checkin/perfectdays?cid=" + checkLineId.data.message[0].cid + "&lineid=" + profile.userId
@@ -91,3 +98,6 @@ function ChecklogPage() {
 }
 
 export default ChecklogPage;
+
+
+

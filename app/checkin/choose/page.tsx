@@ -7,9 +7,10 @@ import { setInterval } from "timers";
 import { useRouter, useSearchParams } from "next/navigation";
 // import frontcard from "@/app/choose/components/frontcard"
 import PerfectdaysPage from "../perfectdays/page";
-import Extclockpage from "../Extclock/page";
+// import Extclockpage from "../Extclock/page";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";
+
 
 import {
   Dialog,
@@ -26,41 +27,54 @@ import { Input } from "@/components/ui/input";
 import { Copy } from "lucide-react";
 import liff from "@line/liff";
 import axios from "axios";
+import Extclock from "./component/extclock";
 
 
-function ChoosePage() {
-   const pathUrl: any = process.env.pathUrl;
+interface dataProps {
+  line: string;
+  datacid: string;
+  profile: Profile;
+}
+interface Profile {
+  userId: string;
+  displayName: string;
+  pictureUrl: string;
+}
+
+function ChoosePage({ line, datacid, profile }: dataProps) {
+  const pathUrl: any = process.env.pathUrl;
   const searchParams = useSearchParams();
-   const cid = searchParams.get("cid");
+  const cid = searchParams.get("cid");
   const lineID = searchParams.get("lineid");
   const idcardliff: any = process.env.idcardliff;
-   const [data, setData] = useState<any>({});
-   const [lineId, setLineId] = useState("");
-  const [profile, setProfile] = useState<any>({});
-   const [image, setimage] = useState("");
+  const [data, setData] = useState<any>({});
+  const [lineId, setLineId] = useState("");
+  // const [profile, setProfile] = useState<any>({});
+  const [profileid, setProfileid] = useState<any>({});
+  const [image, setimage] = useState("");
   // const data = {cid: '1329900007811', name: 'mikung'}
-  const router = useRouter(); 
-  console.log("CID",cid);
+  const router = useRouter();
+  console.log("CID", cid);
   const getlinkcheckin = async () => {
     // router.push("/checkin/Extclock");
-
   };
-   const Flipback = async () => {
-     router.replace("/checkin/perfectdays?cid="+cid+"&lineid="+lineID);
+  const Flipback = async () => {
+    router.replace("/checkin/perfectdays?cid=" + cid + "&lineid=" + lineID);
   };
   const getProfile = async () => {
     await liff.init({ liffId: idcardliff }).then(async () => {
-      const profile = await liff.getProfile();
+      const profile:any = await liff.getProfile();
 
       // const idToken=liff.getIdToken();
       console.log("Profile", profile);
-      setProfile(profile);
+      setProfileid(profile);
       setLineId(profile?.userId);
       setLineId(profile?.userId);
       console.warn(lineId);
+      setimage(profile?.pictureUrl);
     });
     await liff.ready;
-    setimage(profile.pictureUrl);
+    
   };
   const getData = async () => {
     const res = await axios.get(`${pathUrl}/worker/getdataworker/${cid}`);
@@ -71,9 +85,9 @@ function ChoosePage() {
       // console.log("ระยะห่าง", distance);
     }
   };
-  useEffect(() => { 
+  useEffect(() => {
     getProfile();
-  })
+  });
 
   return (
     <div className="containner ">
@@ -102,7 +116,17 @@ function ChoosePage() {
                 <DialogHeader>
                   <DialogTitle>Edit profile</DialogTitle>
                 </DialogHeader>
-                <Extclockpage/>
+
+                <Extclock
+                  line="123"
+                  datacid="123456"
+                  profile={profileid}
+                ></Extclock>
+                {/* <Extclockpage
+                  line="123"
+                  datacid="123456789"
+                  profile={profileid?.pictureUrl}
+                /> */}
                 {/* <div className=" bg-local bgImgback grid grid-cols-1 "></div> */}
                 {/* <div className="  "> */}
 
@@ -112,7 +136,7 @@ function ChoosePage() {
             </div>
             <div className="mt-1">
               <Button className="border-4 rounded-lg bg-[#531805] border-white w-[228px] h-[56px] text-lg">
-                Over Time (OT)
+                Over Time (OT) 
               </Button>
             </div>
             <div>

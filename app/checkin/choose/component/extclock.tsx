@@ -17,7 +17,7 @@ interface Profile {
   displayName: string;
   pictureUrl: string;
 }
-function page({line,datacid,profile}: dataProps) {
+function Extclock({line,datacid,profile}: dataProps) {
   const pathUrl: any = process.env.pathUrl;
   // const [profile, setProfile] = useState<any>({});
   const [lineId, setLineId] = useState("");
@@ -28,21 +28,20 @@ function page({line,datacid,profile}: dataProps) {
   const searchParams = useSearchParams();
   const cid = searchParams.get("cid");
   const lineID = searchParams.get("lineid");
-  const getProfile = async () => {
-    await liff.init({ liffId: idcardliff }).then(async () => {
-      const profile:any = await liff.getProfile();
+//   const getProfile = async () => {
+//     await liff.init({ liffId: idcardliff }).then(async () => {
+//       const profile = await liff.getProfile();
 
         
-      // const idToken=liff.getIdToken();
-      console.log("Profile", profile);
+//       // const idToken=liff.getIdToken();
+//       console.log("Profile", profile);
       
-      setLineId(profile?.userId);
-      setimage(profile?.pictureUrl);
-      console.warn(lineId);
-    });
-    await liff.ready;
-    
-  };
+//       setLineId(profile?.userId);
+//       console.warn(lineId);
+//     });
+//     await liff.ready;
+//     setimage(profile.pictureUrl);
+//   };
   const getData = async () => {
     const res = await axios.get(`${pathUrl}/worker/getdataworker/${cid}`);
     console.log(res.data);
@@ -53,7 +52,8 @@ function page({line,datacid,profile}: dataProps) {
     }
   };
   useEffect(() => { 
-    getProfile();
+      // getProfile();
+      getData();
   },[]);
   return (
     <div className=" bg-local bgImgback grid grid-cols-1 ">
@@ -75,7 +75,7 @@ function page({line,datacid,profile}: dataProps) {
               className="  rounded-full border-[15px] border-[#F26B22] "
               // src="/image/personal w.png"
               // src={profile?.pictureUrl}
-              src={image}
+              src={profile?.pictureUrl}
               alt={""}
               width={130}
               height={135}
@@ -90,7 +90,7 @@ function page({line,datacid,profile}: dataProps) {
       </div>
       <div className="">
         {line} {datacid}
-        {profile.pictureUrl}
+ 
       </div>
 
       {/* </div> */}
@@ -98,4 +98,4 @@ function page({line,datacid,profile}: dataProps) {
   );
 }
 
-export default page
+export default Extclock

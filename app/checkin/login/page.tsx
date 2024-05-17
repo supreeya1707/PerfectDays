@@ -49,6 +49,7 @@ function LoginPage() {
       passcode: "",
     },
   });
+  
   // Submit
   const onSubmit = async (data: LoginFormValues) => {
     console.log("data", data);
@@ -74,6 +75,9 @@ function LoginPage() {
         // const dataSend = {
         //   token_line: `${profile.userId}`,
         // };
+        updatePatient(res.data);
+        console.log('updatePatient', updatePatient);
+        // updatedata(res.data.message[0], `${profile.userId}`);
         router.push("/checkin/perfectdays?cid=" + res.data.message.cid +"&lineid=" + lineid);
       }
       else {
@@ -154,5 +158,7 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
+
 
 

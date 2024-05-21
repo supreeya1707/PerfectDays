@@ -267,20 +267,20 @@ const Checkintime = () => {
       <div className="containner  ">
         {/* <div className="text-xl font-bold">{ props.mikung.cid}</div>
         <div className="text-xl font-bold">{ props.mikung.name}</div> */}
-        <div className="">
-          {line} {datacid}
+        <div className="grid grid-cols-1 mb-3">
+          {/* {line} {datacid} */}
           {/* {profile.pictureUrl} */}
-        </div>
-        <div className="bg-local bgImgback grid grid-cols-1">
-          <div className=" mophlogo ">
+
+          {/* <div className="bg-local bgImgback grid grid-cols-1"> */}
+          {/* <div className=" mophlogo ">
             <Image
               src="/perfectdays2/image/MOPH 4.png"
               alt={""}
               width={47}
               height={48}
             ></Image>
-          </div>
-          <div className=" grid grid-cols-1  justify-self-center">
+          </div> */}
+          <div className=" grid grid-cols-1  justify-self-center ">
             <Image
               className="flex items-center self-start ml-1  rounded-full border-[15px] border-[#F26B22] "
               // src="/image/personal w.png"

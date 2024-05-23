@@ -34,8 +34,9 @@ const Overtime = () => {
     //       </div>
     //     </div>
     //   </div>
-    // </div>
-    <div className="containner mt-10 pt-10">
+      // </div>
+      <div>
+          <div className="containner mt-10 pt-10">
       {/* <div className="bg-local  bgImgback grid grid-cols-1"> */}
        
 
@@ -72,7 +73,10 @@ const Overtime = () => {
           ></Image>
         </div>
       {/* </div> */}
-    </div>
+          </div> 
+          
+      </div>
+   
   );
 };
 

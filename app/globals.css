@@ -148,9 +148,9 @@ body {
 }
 .mophlogo {
     /* image: url('../public/image/MOPH\ 4.png'); */
-    position: relative;
-    margin-left:15%;
-    margin-top: 150px;
+    position: absolute;
+    margin-left:60px;
+    margin-top: 170px;
     padding: 5px;
     width: 47px;
     height: 48px;

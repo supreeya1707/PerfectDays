@@ -1,96 +1,163 @@
-'use client'
-import React, { useEffect, useState } from 'react'
+"use client";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import liff from "@line/liff";
 import GetOS from "@line/liff/get-os";
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import { InfinitySpin } from 'react-loader-spinner';
-import { usePatientStore } from '../store';
+import { InfinitySpin } from "react-loader-spinner";
+import { usePatientStore } from "../store";
+import Menuextclock from "./component/Menuextclock";
+import Checkintime from "./component/checkintime";
+import Overtime from "./component/overtime";
 function ChecklogPage() {
-    const router = useRouter(); 
-    const pathUrl: any = process.env.pathUrl;
-    // const idcardliff: any = process.env.lifftest;
-    const idcardliff: any = process.env.idcardliff;
+  const router = useRouter();
+  const [step, setStep] = useState(1);
+  const pathUrl: any = process.env.pathUrl;
+  // const idcardliff: any = process.env.lifftest;
+  const idcardliff: any = process.env.idcardliff;
 
-    const [os, setOs] = useState<string>();
-    
-    const [profile, setProfile] = useState<any>({});
-    const [lineId, setLineId] = useState("");
-    const [User, setUser] = useState("");
-     const [loading, setLoading] = useState(true);
+  const [os, setOs] = useState<string>();
+
+  const [profile, setProfile] = useState<any>({});
+  const [lineId, setLineId] = useState("");
+  const [cid, setCid] = useState("");
+  const [User, setUser] = useState("");
+  const [loading, setLoading] = useState(true);
   const [checkUser, setCheckuser] = useState(true);
-   const updatePatient: any = usePatientStore(
-     (state: any) => state.updatePatient
-   );
-     useEffect(() => {
-       const initLiff = async () => {
-         liff.use(new GetOS());
-         setOs(liff.getOS());
-         await liff.init({ liffId: idcardliff }).then(async () => {
-           if (!liff.isLoggedIn()) {
-             liff.login();
-           } else {
-             const profile = await liff.getProfile();
+  const updatePatient: any = usePatientStore(
+    (state: any) => state.updatePatient
+  );
 
-             // console.log(profile);
-             // console.log("profile?.userId", profile?.userId);
-             setProfile(profile);
-             setLineId(profile?.userId);
+  const fnSetStep = (e: any) => {
+    setStep(e);
+  }
+  useEffect(() => {
+    const initLiff = async () => {
+      liff.use(new GetOS());
+      setOs(liff.getOS());
+      await liff.init({ liffId: idcardliff }).then(async () => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          const profile = await liff.getProfile();
 
-             console.warn(lineId);
+          // console.log(profile);
+          // console.log("profile?.userId", profile?.userId);
+          setProfile(profile);
+          setLineId(profile?.userId);
 
-             const dataSend = {
-               token_line: `${profile.userId}`,
-             };
+          console.warn(lineId);
 
-            
-             const checkLineId = await axios.get(
-               `${pathUrl}/worker/checkline/${profile.userId }`
-             );
-             console.info(checkLineId.data);
-             console.log("res2", checkLineId.data);
-             console.log('checkLineId', checkLineId)
-               if (checkLineId.data.message.length > 0) {
-                 const stafftype = checkLineId.data.message[0];
-                   setCheckuser(true);
-                 setUser(checkLineId.data[0]);
-                 updatePatient(checkLineId.data.message[0]);
-                 console.log('userPatient', updatePatient);
-                //  updatedata(checkLineId.data.message[0], `${profile.userId}`);
-                   //    rout to page checkin...
-                  router.replace(
-                    "/checkin/perfectdays?cid=" + checkLineId.data.message[0].cid + "&lineid=" + profile.userId
-                  );
-                //  console.log("check CID", checkLineId.data.message[0].cid);
-                   
-               } else {
-                   router.push("/checkin/login?lineid="+profile.userId );
-                   setCheckuser(false);
-               }
-             
-           }
-         });
-         await liff.ready;
-       };
+          const dataSend = {
+            token_line: `${profile.userId}`,
+          };
 
-       try {
-         initLiff();
-       } catch (e: any) {
-         console.error("liff init error", e.message);
-       }
-     }, [lineId]);
+          const checkLineId = await axios.get(
+            `${pathUrl}/worker/checkline/${profile.userId}`
+          );
+          console.info(checkLineId.data);
+          console.log("res2", checkLineId.data);
+          console.log("checkLineId", checkLineId);
+          if (checkLineId.data.message.length > 0) {
+            setLoading(false);
+            const stafftype = checkLineId.data.message[0];
+            setCheckuser(true);
+            setUser(checkLineId.data[0]);
+            updatePatient(checkLineId.data.message[0]);
+            console.log("userPatient", updatePatient);
+            setCid(checkLineId.data.message[0].cid);
+            //  updatedata(checkLineId.data.message[0], `${profile.userId}`);
+            //    rout to page checkin...
+            // router.replace(
+            //   "/checkin/perfectdays?cid=" + checkLineId.data.message[0].cid + "&lineid=" + profile.userId
+            // );
+            //  console.log("check CID", checkLineId.data.message[0].cid);
+          } else {
+            router.push("/checkin/login?lineid=" + profile.userId);
+            setCheckuser(false);
+          }
+        }
+      });
+      await liff.ready;
+    };
 
+    try {
+      initLiff();
+    } catch (e: any) {
+      console.error("liff init error", e.message);
+    }
+  }, [lineId]);
+console.log("datacid" + cid);
   return (
     <div>
-      {loading && (
+      {loading ? (
         <div className="flex justify-center items-center w-full mt-20">
-          <InfinitySpin
-           
-            width="200"
-            color="#4fa94d"
-            
-          />
+          <InfinitySpin width="200" color="#4fa94d" />
+        </div>
+      ) : (
+        <div>
+          <div className="">
+            <div className="bg-local  bgImgback grid grid-cols-1">
+              <div className="ml-16 mt-20 pt-24 ">
+                {/* <div className="mophlogo"> */}
+                <Image
+                  className=""
+                  src="/perfectdays2/image/MOPH 4.png"
+                  alt={""}
+                  width={47}
+                  height={48}
+                ></Image>
+              </div>
+              {step === 1 && (
+                <Checkintime line={lineId} datacid={cid} profile={profile} />
+              )}
+              {step === 2 && (
+                <Menuextclock line={lineId} datacid={cid} profile={profile}  fn={fnSetStep}  />
+              )}
+              {step === 3 && (
+                <Overtime line={lineId} datacid={cid} profile={profile}   />
+              )}
+              {/* {step === 3 && } */}
+              {/* ปุ่ม flip เพื่อพลิกด้านหลัง */}
+              <div className="absolute  -bottom-2 right-2 ">
+                <Image
+                  className="mt-2 cursor-pointer"
+                  onClick={() => {
+                    if (step === 2) {
+                      setStep(1);
+                    } else {
+                      setStep(2);
+                    }
+                  }}
+                  // src="/image/personal w.png"
+                  src="/perfectdays2/image/repeat.png"
+                  alt={""}
+                  width={58}
+                  height={58}
+                ></Image>
+              </div>
+            </div>
+          </div>
+          {/* Show time and buttom refresh  gps now */}
+          <div className="  pt-[620px] w-full">
+            <div className="flex flex-col items-center">
+              <div className="flex flex-row">
+                <div className="justify-self-center  text-4xl">
+                  {/* {hours}:{minutes}:{seconds} */}
+                </div>
+              </div>
+
+              <div className="flex flex-col items-center mt-5">
+                <div className="flex flex-row">
+                  {/* <Button className="bg-[#30485E] text-[16px] w-[321px]  ">
+                    UPDATE พิกัดอีกครั้ง
+                  </Button> */}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -98,6 +165,3 @@ function ChecklogPage() {
 }
 
 export default ChecklogPage;
-
-
-

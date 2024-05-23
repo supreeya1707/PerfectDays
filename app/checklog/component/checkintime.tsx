@@ -27,248 +27,247 @@ interface Profile {
   pictureUrl: string;
 }
 
-const Checkintime = () => {
-     const router = useRouter();
-     const searchParams = useSearchParams();
-     const cid = searchParams.get("cid");
-     const lineID = searchParams.get("lineid");
-     console.log(lineID);
-     console.log(cid);
-     const pathUrl: any = process.env.pathUrl;
-     const [lat1, setLat1] = useState<any>({});
-     const [long1, setLong1] = useState<any>({});
-     const [Lat2, setLat2] = useState<any>({});
-     const [Long2, setLong2] = useState<any>({});
-     const [distance, setDistance] = useState<any>();
-     const [checkclockin, setcheckclockin] = useState<any>({});
-     const [checkclockout, setcheckclockout] = useState<any>({});
-     const [name, setName] = useState<any>({});
-     const [data, setData] = useState<any>({});
-     const [showclockin, setshowclockin] = useState<any>({});
-     const [showclockout, setshowclockout] = useState<any>({});
-     const [outrang, setOutrange] = useState<any>({});
-     const [btncheckin, setbtncheckin] = useState<any>({});
-     const [btncheckout, setbtncheckout] = useState<any>({});
-     const [emotion, setEmotion] = useState(" ");
-     const [loading, setLoading] = useState(true);
-     const [hours, setHours] = useState("00");
-     const [minutes, setMinutes] = useState("00");
-     const [seconds, setSeconds] = useState("00");
-     const [date, setDate] = useState("date");
-     const API_KEY: any = process.env.API_KEY;
-     const idcardliff: any = process.env.idcardliff;
-     const [profileid, setProfileid] = useState<any>({});
-     const [os, setOs] = useState<string>();
-     // const [profile, setProfile] = useState<any>({});
-     const [lineId, setLineId] = useState("");
-     const [image, setimage] = useState("");
-     const r = 6371;
+const Checkintime = ({ line, datacid, profile }: dataProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-     function haversine(lat1: any, lon1: any, lat2: any, lon2: any) {
-       const R = 6371; // รัศมีของโลก (เช่น เมตร)
 
-       console.log(lat1, lon1, lat2, lon2);
-       const dLat = (lat2 - lat1) * (Math.PI / 180);
-       const dLon = (lon2 - lon1) * (Math.PI / 180);
-       const a =
-         Math.sin(dLat / 2) ** 2 +
-         Math.cos(lat1 * (Math.PI / 180)) *
-           Math.cos(lat2 * (Math.PI / 180)) *
-           Math.sin(dLon / 2) ** 2;
-       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-       const distance = R * c;
-       return distance;
-     }
+  console.log(line);
+  console.log(datacid);
+  const pathUrl: any = process.env.pathUrl;
+  const [lat1, setLat1] = useState<any>({});
+  const [long1, setLong1] = useState<any>({});
+  const [Lat2, setLat2] = useState<any>({});
+  const [Long2, setLong2] = useState<any>({});
+  const [distance, setDistance] = useState<any>();
+  const [checkclockin, setcheckclockin] = useState<any>({});
+  const [checkclockout, setcheckclockout] = useState<any>({});
+  const [name, setName] = useState<any>({});
+  const [data, setData] = useState<any>({});
+  const [showclockin, setshowclockin] = useState<any>({});
+  const [showclockout, setshowclockout] = useState<any>({});
+  const [outrang, setOutrange] = useState<any>({});
+  const [btncheckin, setbtncheckin] = useState<any>({});
+  const [btncheckout, setbtncheckout] = useState<any>({});
+  const [emotion, setEmotion] = useState(" ");
+  const [loading, setLoading] = useState(true);
+  const [hours, setHours] = useState("00");
+  const [minutes, setMinutes] = useState("00");
+  const [seconds, setSeconds] = useState("00");
+  const [date, setDate] = useState("date");
+  const API_KEY: any = process.env.API_KEY;
+  const idcardliff: any = process.env.idcardliff;
+  const [profileid, setProfileid] = useState<any>({});
+  const [os, setOs] = useState<string>();
+  // const [profile, setProfile] = useState<any>({});
+  const [lineId, setLineId] = useState("");
+  const [image, setimage] = useState("");
+  const r = 6371;
 
-     const getData = async () => {
-       const res = await axios.get(`${pathUrl}/worker/getdataworker/${cid}`);
-       console.log(res.data);
-       if (res.data.ok) {
-         setData(res.data.message[0]);
-         // setDistance(distance)
-         console.log("ระยะห่าง", distance);
-       }
-     };
-     const getProfile = async () => {
-       await liff.init({ liffId: idcardliff }).then(async () => {
-         const profile: any = await liff.getProfile();
-         // const idToken=liff.getIdToken();
-         console.log("Profile", profile);
-         setProfileid(profile);
-         setLineId(profile?.userId);
-         setLineId(profile?.userId);
-         setimage(profile?.pictureUrl);
-         console.warn(lineId);
-       });
-       await liff.ready;
-     };
+  function haversine(lat1: any, lon1: any, lat2: any, lon2: any) {
+    const R = 6371; // รัศมีของโลก (เช่น เมตร)
 
-     const initial = async () => {
-       setLoading(true);
-       const res = await axios.get(`${pathUrl}/worker/getdataworker/${cid}`);
-       console.log(res.data);
-       if (res.data.ok) {
-         await navigator.geolocation.getCurrentPosition(
-           async (position: any) => {
-             setLat1(position.coords.latitude);
-             setLong1(position.coords.longitude);
-             console.log("SET lat", position.coords.latitude);
-             const d: number = haversine(
-               res.data.message[0].organize_lat,
-               res.data.message[0].organize_long,
-               // 13.807305, 99.924653,
-               position.coords.latitude,
-               position.coords.longitude
-             );
-             console.log("ddd", d);
-             setDistance(d * 1000);
-             console.log("datadis", distance);
-             setData(res.data.message[0]);
-             setcheckclockin(res.data.message[0].clockin);
-             setcheckclockout(res.data.message[0].clockout);
-             // setName( res.data.message[0].fname + " "+res.data.message[0].lname);
+    console.log(lat1, lon1, lat2, lon2);
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    return distance;
+  }
 
-             console.log("checkclockin", data.checkclockin);
-             // router.push("/checkin/feeling?cid=" + data.cid);
-           }
-         );
-       }
-       setLoading(false);
-       // await liff.init({ liffId: idcardliff }).then(async () => {
-       //   const profile = await liff.getProfile();
-       //   console.log("Profile", profile);
-       // });
-     };
-     useEffect(() => {
-       initial();
-       getProfile();
-       // console.log("datadis", distance);
-       const intervalId = setInterval(() => {
-         let d = new Date();
-         var h = d.getHours().toString();
-         var m = d.getMinutes().toString();
-         var s = d.getSeconds().toString();
+  const getData = async () => {
+    const res = await axios.get(`${pathUrl}/worker/getdataworker/${datacid}`);
+    console.log(res.data);
+    if (res.data.ok) {
+      setData(res.data.message[0]);
+      // setDistance(distance)
+      console.log("ระยะห่าง", distance);
+    }
+  };
+  const getProfile = async () => {
+    await liff.init({ liffId: idcardliff }).then(async () => {
+      const profile: any = await liff.getProfile();
+      // const idToken=liff.getIdToken();
+      console.log("Profile", profile);
+      setProfileid(profile);
+      setLineId(profile?.userId);
+      setLineId(profile?.userId);
+      setimage(profile?.pictureUrl);
+      console.warn(lineId);
+    });
+    await liff.ready;
+  };
 
-         var z =
-           d.getDate().toString().padStart(2, "0") +
-           " / " +
-           (d.getMonth() + 1).toString().padStart(2, "0") +
-           " / " +
-           d.getFullYear();
-         setDate(z);
-         setHours(h.padStart(2, "0"));
-         setMinutes(m.padStart(2, "0"));
-         setSeconds(s.padStart(2, "0"));
+  const initial = async () => {
+    setLoading(true);
+    const res = await axios.get(`${pathUrl}/worker/getdataworker/${datacid}`);
+    console.log(res.data);
+    if (res.data.ok) {
+      await navigator.geolocation.getCurrentPosition(async (position: any) => {
+        setLat1(position.coords.latitude);
+        setLong1(position.coords.longitude);
+        console.log("SET lat", position.coords.latitude);
+        const d: number = haversine(
+          res.data.message[0].organize_lat,
+          res.data.message[0].organize_long,
+          // 13.807305, 99.924653,
+          position.coords.latitude,
+          position.coords.longitude
+        );
+        console.log("ddd", d);
+        setDistance(d * 1000);
+        console.log("datadis", distance);
+        setData(res.data.message[0]);
+        setcheckclockin(res.data.message[0].clockin);
+        setcheckclockout(res.data.message[0].clockout);
+        // setName( res.data.message[0].fname + " "+res.data.message[0].lname);
 
-         return () => clearInterval(intervalId);
-       }, 1000);
+        console.log("checkclockin", data.checkclockin);
+        // router.push("/checkin/feeling?cid=" + data.cid);
+      });
+    }
+    setLoading(false);
+    // await liff.init({ liffId: idcardliff }).then(async () => {
+    //   const profile = await liff.getProfile();
+    //   console.log("Profile", profile);
+    // });
+  };
+  const intervalId = setInterval(() => {
+    let d = new Date();
+    var h = d.getHours().toString();
+    var m = d.getMinutes().toString();
+    var s = d.getSeconds().toString();
 
-       // }, [seconds, minutes, hours, date]);
-     }, []);
+    var z =
+      d.getDate().toString().padStart(2, "0") +
+      " / " +
+      (d.getMonth() + 1).toString().padStart(2, "0") +
+      " / " +
+      d.getFullYear();
+    setDate(z);
+    setHours(h.padStart(2, "0"));
+    setMinutes(m.padStart(2, "0"));
+    setSeconds(s.padStart(2, "0"));
 
-     // console.log("data cide", data.cid);
-     // console.log("datadistance", distance);
+    return () => clearInterval(intervalId);
+  }, 1000);
 
-     const now = new Date();
-     const getEmotion = (e: any) => {
-       // setMessage(e);
-       setEmotion(e.target.value);
+  useEffect(() => {
+    initial();
+    getProfile();
+    // console.log("datadis", distance);
+    
+    // }, [seconds, minutes, hours, date]);
+  }, []);
 
-       // console.log("value is Emotion:", e.target.value);
-     };
-     const flippage = async () => {};
-     const postData = async () => {
-       const dataSend = {
-         clockin: dayjs(new Date()).format("HH:mm"),
-         // clockout:dayjs(new Date).format("HH:mm"),
-         work_date: dayjs(new Date()).format("YYYY-MM-DD"),
-         worker_id: data.id,
-       };
-       console.log("datasend", dataSend);
-       const res = await axios.post(`${pathUrl}/perfectdays`, dataSend);
+  // console.log("data cide", data.cid);
+  // console.log("datadistance", distance);
 
-       // console.log("res send data", res.data);
+  const now = new Date();
+  const getEmotion = (e: any) => {
+    // setMessage(e);
+    setEmotion(e.target.value);
 
-       if (res.data.ok) {
-         // alert("บันทึกข้อมูลสำเร็จ");
-         Swal.fire({
-           title: "SUCCESS!",
-           text: "บันทึกข้อมูลสำเร็จ",
-           icon: "success",
-           timer: 1500,
-           showConfirmButton: false,
-           allowOutsideClick: false,
+    // console.log("value is Emotion:", e.target.value);
+  };
+  const flippage = async () => {};
+  const postData = async () => {
+    const dataSend = {
+      clockin: dayjs(new Date()).format("HH:mm"),
+      // clockout:dayjs(new Date).format("HH:mm"),
+      work_date: dayjs(new Date()).format("YYYY-MM-DD"),
+      worker_id: data.id,
+    };
+    console.log("datasend", dataSend);
+    const res = await axios.post(`${pathUrl}/perfectdays`, dataSend);
 
-           // confirmButtonText: "รับทราบ!",
-         });
-         console.log("res : ", res.data);
+    // console.log("res send data", res.data);
 
-         // location.reload();
-         getData();
-       } else {
-         throw new Error(res.data.error);
-       }
-     };
-     // console.log("transaction", data.transaction_id);
-     const upsData = async () => {
-       const dataSend = {
-         // clockin:dayjs(new Date).format("HH:mm") ,
-         clockout: dayjs(new Date()).format("HH:mm"),
-       };
-       console.log("datasend", dataSend);
+    if (res.data.ok) {
+      // alert("บันทึกข้อมูลสำเร็จ");
+      Swal.fire({
+        title: "SUCCESS!",
+        text: "บันทึกข้อมูลสำเร็จ",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+        allowOutsideClick: false,
 
-       const res_up = await axios.put(
-         `${pathUrl}/perfectdays/${data.transaction_id}`,
-         dataSend
-       );
-       console.log("res send data", res_up.data);
+        // confirmButtonText: "รับทราบ!",
+      });
+      console.log("res : ", res.data);
 
-       if (res_up.data.ok) {
-         // alert("บันทึกข้อมูลสำเร็จ");
+      // location.reload();
+      getData();
+    } else {
+      throw new Error(res.data.error);
+    }
+  };
+  // console.log("transaction", data.transaction_id);
+  const upsData = async () => {
+    const dataSend = {
+      // clockin:dayjs(new Date).format("HH:mm") ,
+      clockout: dayjs(new Date()).format("HH:mm"),
+    };
+    console.log("datasend", dataSend);
 
-         // console.log("res : ", data.cid);
-         // location.reload();
-         getData();
-       } else {
-         throw new Error(res_up.data.error);
-       }
-     };
+    const res_up = await axios.put(
+      `${pathUrl}/perfectdays/${data.transaction_id}`,
+      dataSend
+    );
+    console.log("res send data", res_up.data);
 
-     const upDateEmotion = async (e: number) => {
-       // setMessage(e);
-       const res: any = await axios.put(
-         `${pathUrl}/perfectdays/${data.transaction_id}`,
-         {
-           emotion: e,
-         }
-       );
-       if (res.data.ok) {
-         Swal.fire({
-           title: "SUCCESS!",
-           text: "บันทึกข้อมูลสำเร็จ",
-           icon: "success",
-           timer: 1500,
-           showConfirmButton: false,
-           allowOutsideClick: false,
+    if (res_up.data.ok) {
+      // alert("บันทึกข้อมูลสำเร็จ");
 
-           // confirmButtonText: "รับทราบ!",
-         });
-         // router.replace("/checkin/perfectdays?cid=" + cid);
-         // location.reload();
-         getData();
-       }
-     };
-     console.log("LINE" + lineId);
-     const Flipback = async () => {
-       router.push("/checkin/choose?cid=" + cid);
-     };
+      // console.log("res : ", data.cid);
+      // location.reload();
+      getData();
+    } else {
+      throw new Error(res_up.data.error);
+    }
+  };
+
+  const upDateEmotion = async (e: number) => {
+    // setMessage(e);
+    const res: any = await axios.put(
+      `${pathUrl}/perfectdays/${data.transaction_id}`,
+      {
+        emotion: e,
+      }
+    );
+    if (res.data.ok) {
+      Swal.fire({
+        title: "SUCCESS!",
+        text: "บันทึกข้อมูลสำเร็จ",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+
+        // confirmButtonText: "รับทราบ!",
+      });
+      // router.replace("/checkin/perfectdays?cid=" + cid);
+      // location.reload();
+      getData();
+    }
+  };
+  console.log("LINE" + lineId);
+  const Flipback = async () => {
+    router.push("/checkin/choose?cid=" + datacid);
+  };
   return (
     <div>
       <div className="containner  ">
         {/* <div className="text-xl font-bold">{ props.mikung.cid}</div>
         <div className="text-xl font-bold">{ props.mikung.name}</div> */}
         <div className="grid grid-cols-1 ">
-          {/* {line} {datacid} */}
+          {/* {} {datacid} */}
           {/* {profile.pictureUrl} */}
 
           {/* <div className="bg-local bgImgback grid grid-cols-1"> */}
@@ -290,18 +289,7 @@ const Checkintime = () => {
               height={135}
             ></Image>
           </div>
-          {/* ปุ่ม flip เพื่อพลิกด้านหลัง */}
-          <div className="absolute  -bottom-2 right-2 ">
-            <Image
-              className="mt-2 cursor-pointer"
-              onClick={Flipback}
-              // src="/image/personal w.png"
-              src="/perfectdays2/image/repeat.png"
-              alt={""}
-              width={58}
-              height={58}
-            ></Image>
-          </div>
+        
 
           <div className=" grid grid grid-flow-row auto-rows-max justify-self-center  ">
             {/* <div className=" grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1  items-center"> */}
@@ -353,7 +341,7 @@ const Checkintime = () => {
                     className="text-[16px]  text-start
                     text-[#8F8B8B] "
                   >
-                    ห่างจากสถานที่ทำงาน : {Math.round(distance)} เมตร
+                    ห่างจากสถานที่ทำcงาน : {Math.round(distance)} เมตร
                   </div>
                 </div>
               </div>

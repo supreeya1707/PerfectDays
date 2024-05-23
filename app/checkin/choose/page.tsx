@@ -27,7 +27,7 @@ import { Input } from "@/components/ui/input";
 import { Copy } from "lucide-react";
 import liff from "@line/liff";
 import axios from "axios";
-import Extclock from "./component/extclock";
+
 
 
 interface dataProps {
@@ -117,11 +117,11 @@ function ChoosePage({ line, datacid, profile }: dataProps) {
                   <DialogTitle>Edit profile</DialogTitle>
                 </DialogHeader>
 
-                <Extclock
+                {/* <Extclock
                   line="123"
                   datacid="123456"
                   profile={profileid}
-                ></Extclock>
+                ></Extclock> */}
                 {/* <Extclockpage
                   line="123"
                   datacid="123456789"

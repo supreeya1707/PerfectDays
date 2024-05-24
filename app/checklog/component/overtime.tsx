@@ -26,7 +26,7 @@ const Overtime = ({ line, datacid, profile }: dataProps) => {
   const searchParams = useSearchParams();
   const cid = searchParams.get("datacid");
   const getData = async () => {
-    const res = await axios.get(`${pathUrl}/worker/getdataworker/${cid}`);
+    const res = await axios.get(`${pathUrl}/worker/getdataworker/${datacid}`);
     console.log("res.data",res.data);
     if (res.data.ok) {
       setData(res.data.message[0]);

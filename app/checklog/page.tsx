@@ -11,6 +11,7 @@ import { usePatientStore } from "../store";
 import Menuextclock from "./component/Menuextclock";
 import Checkintime from "./component/checkintime";
 import Overtime from "./component/overtime";
+import Extcomment from "./component/Extcomment";
 function ChecklogPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
@@ -114,10 +115,23 @@ console.log("datacid" + cid);
                 <Checkintime line={lineId} datacid={cid} profile={profile} />
               )}
               {step === 2 && (
-                <Menuextclock line={lineId} datacid={cid} profile={profile}  fn={fnSetStep}  />
+                <Menuextclock
+                  line={lineId}
+                  datacid={cid}
+                  profile={profile}
+                  fn={fnSetStep}
+                />
               )}
               {step === 3 && (
-                <Overtime line={lineId} datacid={cid} profile={profile}   />
+                <Extcomment
+                  line={lineId}
+                  datacid={cid}
+                  profile={profile}
+                 
+                />
+              )}
+              {step === 4 && (
+                <Overtime line={lineId} datacid={cid} profile={profile} />
               )}
               {/* {step === 3 && } */}
               {/* ปุ่ม flip เพื่อพลิกด้านหลัง */}

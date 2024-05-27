@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 
 interface dataProps {
@@ -43,6 +45,38 @@ const Extcomment = ({ line, datacid, profile }: dataProps) => {
 
     // }, [seconds, minutes, hours, date]);
   }, []);
+  // const postData = async () => {
+  //   const dataSend = {
+  //     clockin: dayjs(new Date()).format("HH:mm"),
+  //     // clockout:dayjs(new Date).format("HH:mm"),
+  //     work_date: dayjs(new Date()).format("YYYY-MM-DD"),
+  //     worker_id: data.id,
+  //   };
+  //   console.log("datasend", dataSend);
+  //   const res = await axios.post(`${pathUrl}/perfectdays`, dataSend);
+
+  //   // console.log("res send data", res.data);
+
+  //   if (res.data.ok) {
+  //     // alert("บันทึกข้อมูลสำเร็จ");
+  //     Swal.fire({
+  //       title: "SUCCESS!",
+  //       text: "บันทึกข้อมูลสำเร็จ",
+  //       icon: "success",
+  //       timer: 1500,
+  //       showConfirmButton: false,
+  //       allowOutsideClick: false,
+
+  //       // confirmButtonText: "รับทราบ!",
+  //     });
+  //     console.log("res : ", res.data);
+
+  //     // location.reload();
+  //     getData();
+  //   } else {
+  //     throw new Error(res.data.error);
+  //   }
+  // };
   return (
     <div>
       <div className="container mb-20">

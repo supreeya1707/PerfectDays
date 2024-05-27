@@ -97,9 +97,18 @@ const Overtime = ({ line, datacid, profile }: dataProps) => {
           </div>
           {data.clockin != null && data.clockout != null ? (
             <div className="mt-1">
-              <Button className="border-4 bg-[#3956BF] border-gray w-[178px] h-[58px] text-xl cursor-pointer">
+              {distance < data.organize_radius? (
+                <Button className="border-4 bg-[#3956BF] border-gray w-[178px] h-[58px] text-xl cursor-pointer">
                 CLOCK IN
               </Button>
+              ):(
+                <div>
+            <Button className="border-4 bg-[#DFE0E1] border-white w-[178px] h-[58px] rounded-lg text-lg disabled:true ">
+              OUT OF RANGE
+            </Button>
+          </div>
+              )}
+              
             </div>
           ) : (
             <div className="  justify-items-center">

@@ -46,14 +46,22 @@ const Menuextclock = ({ line, datacid, profile, fn }: dataProps) => {
           {data.clockin != null ? (
             <div>
               <Button
+                className="border-4 bg-[#056839] border-gray w-[228px] h-[58px] text-[24px] cursor-pointer"
+                onClick={() => fn(3)}
+              >
+                Ext. CLOCK OUT
+              </Button>
+              
+            </div>
+          ) : (
+            <div>
+              <Button
                 className="border-4 bg-[#3956BF] border-gray w-[228px] h-[58px] text-[24px] cursor-pointer"
                 onClick={() => fn(3)}
               >
                 Ext. CLOCK IN
               </Button>
             </div>
-          ) : (
-            "TEST SYSYEM"
           )}
 
           {/* Ext. CLOCK IN

@@ -43,7 +43,8 @@ const Menuextclock = ({ line, datacid, profile, fn }: dataProps) => {
     <div className="mb-24">
       <div className="flex flex-col  items-center mb-20 ">
         <div className="justify-items-center">
-          {data.clockin != null ? (
+          {data.clockin != null && data.clockout == null && (
+            
             <div>
               <Button
                 className="border-4 bg-[#056839] border-gray w-[228px] h-[58px] text-[24px] cursor-pointer"
@@ -53,7 +54,8 @@ const Menuextclock = ({ line, datacid, profile, fn }: dataProps) => {
               </Button>
               
             </div>
-          ) : (
+          )}
+          {data.clockin==null && data.clockout==null &&(
             <div>
               <Button
                 className="border-4 bg-[#3956BF] border-gray w-[228px] h-[58px] text-[24px] cursor-pointer"
@@ -68,6 +70,8 @@ const Menuextclock = ({ line, datacid, profile, fn }: dataProps) => {
             {/* <Overtime line={line} datacid={datacid} profile={profile}/> */}
           {/* </Button> */}
         </div>
+        {data.clockin != null && data.clockout != null ?
+          (
         <div className="justify-items-center">
           <Button
             className="border-4 bg-[#531805] border-gray w-[228px] h-[58px] rounded-lg text-[24px]  "
@@ -76,6 +80,8 @@ const Menuextclock = ({ line, datacid, profile, fn }: dataProps) => {
             Over Time (OT)
           </Button>
         </div>
+        ): null}
+        
       </div>
     </div>
   );

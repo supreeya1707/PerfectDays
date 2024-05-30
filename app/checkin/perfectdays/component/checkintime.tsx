@@ -37,6 +37,8 @@ const Checkintime = () => {
      const pathUrl: any = process.env.pathUrl;
      const [lat1, setLat1] = useState<any>({});
      const [long1, setLong1] = useState<any>({});
+     const [latitude, setLatitude] = useState<any>({});
+     const [longitude, setLongitude] = useState<any>({});
      const [Lat2, setLat2] = useState<any>({});
      const [Long2, setLong2] = useState<any>({});
      const [distance, setDistance] = useState<any>();
@@ -119,7 +121,10 @@ const Checkintime = () => {
                // 13.807305, 99.924653,
                position.coords.latitude,
                position.coords.longitude
+               
              );
+             setLatitude(position.coords.latitude);
+              setLongitude(position.coords.longitude);
              console.log("ddd", d);
              setDistance(d * 1000);
              console.log("datadis", distance);
@@ -175,7 +180,8 @@ const Checkintime = () => {
        setEmotion(e.target.value);
 
        // console.log("value is Emotion:", e.target.value);
-     };
+  };
+
      const flippage = async () => {};
      const postData = async () => {
        const dataSend = {
@@ -183,6 +189,8 @@ const Checkintime = () => {
          // clockout:dayjs(new Date).format("HH:mm"),
          work_date: dayjs(new Date()).format("YYYY-MM-DD"),
          worker_id: data.id,
+         lat_in: lat1,
+         long_in: long1
        };
        console.log("datasend", dataSend);
        const res = await axios.post(`${pathUrl}/perfectdays`, dataSend);

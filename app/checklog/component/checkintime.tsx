@@ -14,12 +14,17 @@ import liff from "@line/liff";
 import GetOSModule from "@line/liff/get-os";
 import { profile } from "console";
 import GetOS from "@line/liff/get-os";
+import MenuEmotion from "./MenuEmotion";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";=
+
 interface dataProps {
   line: string;
   datacid: string;
   profile: Profile;
+  fn: any;
+  
+  
 }
 interface Profile {
   userId: string;
@@ -27,10 +32,16 @@ interface Profile {
   pictureUrl: string;
 }
 
-const Checkintime = ({ line, datacid, profile }: dataProps) => {
+
+const Checkintime = ({
+  line,
+  datacid,
+  profile,
+  fn,
+  
+}: dataProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
 
   console.log(line);
   console.log(datacid);
@@ -80,15 +91,15 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
     return distance;
   }
 
-  const getData = async () => {
-    const res = await axios.get(`${pathUrl}/worker/getdataworker/${datacid}`);
-    console.log(res.data);
-    if (res.data.ok) {
-      setData(res.data.message[0]);
-      // setDistance(distance)
-      console.log("ระยะห่าง", distance);
-    }
-  };
+  // const getData = async () => {
+  //   const res = await axios.get(`${pathUrl}/worker/getdataworker/${datacid}`);
+  //   console.log(res.data);
+  //   if (res.data.ok) {
+  //     setData(res.data.message[0]);
+  //     // setDistance(distance)
+  //     console.log("ระยะห่าง", distance);
+  //   }
+  // };
   const getProfile = async () => {
     await liff.init({ liffId: idcardliff }).then(async () => {
       const profile: any = await liff.getProfile();
@@ -115,11 +126,14 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
         const d: number = haversine(
           res.data.message[0].organize_lat,
           res.data.message[0].organize_long,
-          // 13.807305, 99.924653,
-          position.coords.latitude,
-          position.coords.longitude
+          13.530873, 99.816264
+          
+          // position.coords.latitude,
+          // position.coords.longitude
         );
-        console.log("ddd", d);
+        // fnlat(position.coords.latitude);
+        //   fnLong(position.coords.longitude);
+        console.log("ddd", position.coords.latitude);
         setDistance(d * 1000);
         console.log("datadis", distance);
         setData(res.data.message[0]);
@@ -137,6 +151,11 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
     //   console.log("Profile", profile);
     // });
   };
+
+  useEffect(() => {
+    initial();
+    getProfile();
+
   const intervalId = setInterval(() => {
     let d = new Date();
     var h = d.getHours().toString();
@@ -156,13 +175,6 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
 
     return () => clearInterval(intervalId);
   }, 1000);
-
-  useEffect(() => {
-    initial();
-    getProfile();
-    // console.log("datadis", distance);
-    
-    // }, [seconds, minutes, hours, date]);
   }, []);
 
   // console.log("data cide", data.cid);
@@ -182,6 +194,9 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
       // clockout:dayjs(new Date).format("HH:mm"),
       work_date: dayjs(new Date()).format("YYYY-MM-DD"),
       worker_id: data.id,
+      lat_in: lat1,
+      long_in: long1,
+      typework: 1,
     };
     console.log("datasend", dataSend);
     const res = await axios.post(`${pathUrl}/perfectdays`, dataSend);
@@ -201,9 +216,9 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
         // confirmButtonText: "รับทราบ!",
       });
       console.log("res : ", res.data);
-
+     initial();
       // location.reload();
-      getData();
+      // getData();
     } else {
       throw new Error(res.data.error);
     }
@@ -213,9 +228,12 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
     const dataSend = {
       // clockin:dayjs(new Date).format("HH:mm") ,
       clockout: dayjs(new Date()).format("HH:mm"),
+      lat_out: lat1,
+      long_out: long1,
+      
     };
     console.log("datasend", dataSend);
-
+ 
     const res_up = await axios.put(
       `${pathUrl}/perfectdays/${data.transaction_id}`,
       dataSend
@@ -223,11 +241,18 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
     console.log("res send data", res_up.data);
 
     if (res_up.data.ok) {
-      // alert("บันทึกข้อมูลสำเร็จ");
+       Swal.fire({
+         title: "SUCCESS!",
+         text: "บันทึกข้อมูลสำเร็จ",
+         icon: "success",
+         timer: 1500,
+         showConfirmButton: false,
+         allowOutsideClick: false,
 
-      // console.log("res : ", data.cid);
-      // location.reload();
-      getData();
+         // confirmButtonText: "รับทราบ!",
+       });
+      // getData();
+      fn(5);
     } else {
       throw new Error(res_up.data.error);
     }
@@ -254,31 +279,16 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
       });
       // router.replace("/checkin/perfectdays?cid=" + cid);
       // location.reload();
-      getData();
+      // getData();
     }
   };
-  console.log("LINE" + lineId);
-  const Flipback = async () => {
-    router.push("/checkin/choose?cid=" + datacid);
-  };
+
   return (
     <div>
       <div className="containner  ">
         {/* <div className="text-xl font-bold">{ props.mikung.cid}</div>
         <div className="text-xl font-bold">{ props.mikung.name}</div> */}
         <div className="grid grid-cols-1 ">
-          {/* {} {datacid} */}
-          {/* {profile.pictureUrl} */}
-
-          {/* <div className="bg-local bgImgback grid grid-cols-1"> */}
-          {/* <div className=" mophlogo ">
-            <Image
-              src="/perfectdays2/image/MOPH 4.png"
-              alt={""}
-              width={47}
-              height={48}
-            ></Image>
-          </div> */}
           <div className=" grid grid-cols-1  justify-self-center ">
             <Image
               className="flex items-center self-start ml-1  rounded-full border-[15px] border-[#F26B22] "
@@ -289,7 +299,6 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
               height={135}
             ></Image>
           </div>
-        
 
           <div className=" grid grid grid-flow-row auto-rows-max justify-self-center  ">
             {/* <div className=" grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1  items-center"> */}
@@ -341,7 +350,7 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
                     className="text-[16px]  text-start
                     text-[#8F8B8B] "
                   >
-                    ห่างจากสถานที่ทำcงาน : {Math.round(distance)} เมตร
+                    ห่างจากสถานที่ทำงาน : {Math.round(distance)} เมตร
                   </div>
                 </div>
               </div>
@@ -351,7 +360,7 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
                   <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
                     <Button
                       className="border-4 bg-[#3956BF] border-gray w-[178px] h-[58px] text-3xl cursor-pointer"
-                      onClick={postData}
+                      onClick={postData } 
                     >
                       CLOCK IN
                     </Button>
@@ -367,119 +376,10 @@ const Checkintime = ({ line, datacid, profile }: dataProps) => {
             )}
           </div>
         </div>
-        {data.emotion == null && data.clockout != null ? (
-          <div className="bg-local bgImgback  grid grid-cols-1">
-            <div className=" mophlogo ">
-              <Image
-                src="/perfectdays2/image/MOPH 4.png"
-                alt={""}
-                width={47}
-                height={48}
-              ></Image>
-            </div>
-            <div className="grid grid-cols-1 justify-items-center    ">
-              <div className="border-2 rounded-lg bg-[#E5F4FF] border-[#437687] w-[292px] h-[305px] ">
-                <div className="border-2 pl-2 m-2  rounded-lg bg-[#87B5D7] border-[#000000] w-[277px] h-[55px] text-center  ">
-                  <label className=" text-[22px] m-2 ">
-                    วันนี้คุณเป็นอย่างไรบ้าง ?
-                  </label>
-                </div>
-                <div className="row mt-5 ">
-                  <div
-                    onClick={() => upDateEmotion(4)}
-                    className="grid grid-cols-1 gap-1 justify-items-center cursor-pointer"
-                  >
-                    <Image
-                      src="/perfectdays2/image/Group1016.png"
-                      alt={""}
-                      width={68}
-                      height={65}
-                    ></Image>
-                    <label
-                      className="text-[18px] font-bold text-[#0093D2]  "
-                      id="Perfect"
-                      htmlFor="Perfect"
-                    >
-                      Perfect Day
-                    </label>
-                  </div>
-                </div>
-                <div className="row mt-5">
-                  <div className="grid grid-cols-3 gap-4 justify-items-center  ">
-                    <div
-                      onClick={() => upDateEmotion(3)}
-                      className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer"
-                    >
-                      {/* <Button
-                      className="w-[68px] h-[65px] bg-center bg-cover bg-transparent bg-[url('/image/happy.png')] "
-                      value="3"
-                      id="happy"
-                      // onClick={(ev: any) => getBTN(ev)}
-                    ></Button> */}
-                      <Image
-                        src="/perfectdays2/image/happy.png"
-                        alt={""}
-                        width={68}
-                        height={65}
-                      ></Image>
-                      <label
-                        className="text-[16px] font-bold  text-[#D43A7B] "
-                        id="happy"
-                      >
-                        Happy
-                      </label>
-                    </div>
-                    <div
-                      onClick={() => upDateEmotion(2)}
-                      className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer"
-                    >
-                      <Image
-                        src="/perfectdays2/image/everage.png"
-                        alt={""}
-                        width={68}
-                        height={65}
-                      ></Image>
-                      <label
-                        className="text-[16px] font-bold  text-[#389F2F] "
-                        id="Everage"
-                      >
-                        Everage
-                      </label>
-                    </div>
-                    <div
-                      onClick={() => upDateEmotion(1)}
-                      className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer"
-                    >
-                      {/* <Button
-                      className="w-[68px] h-[65px] bg-center bg-cover bg-transparent bg-[url('/image/poor.png')] "
-                      value="1"
-                      id="poor"
-                      // onClick={(ev: any) => getBTN(ev)}
-                    ></Button> */}
-                      <Image
-                        src="/perfectdays2/image/poor.png"
-                        alt={""}
-                        width={68}
-                        height={65}
-                      ></Image>
-                      <label
-                        className="text-[16px] font-bold  text-[#764416] "
-                        id="poor"
-                      >
-                        Poor
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div></div>
-        )}
+
         <div className="container  pt-[100px] w-full">
           {data?.emotion != null ? (
-            <div className="flex flex-col justify-center mt-10">
+            <div className="flex flex-col justify-center ">
               <div className="grid grid-cols-1  justify-items-center">
                 {data?.emotion == 4 && (
                   <div className="grid grid-cols1 grid-rows-2 justify-items-center cursor-pointer">

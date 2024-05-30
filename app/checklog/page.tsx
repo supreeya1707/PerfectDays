@@ -12,12 +12,96 @@ import Menuextclock from "./component/Menuextclock";
 import Checkintime from "./component/checkintime";
 import Overtime from "./component/overtime";
 import Extcomment from "./component/Extcomment";
+import MenuEmotion from "./component/MenuEmotion";
+import dayjs from "dayjs";
+import { useQuery } from "@tanstack/react-query";
+
 function ChecklogPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
+  const [emotion, setemotion] = useState(0);
   const pathUrl: any = process.env.pathUrl;
   // const idcardliff: any = process.env.lifftest;
   const idcardliff: any = process.env.idcardliff;
+
+  // const initLiff = async () => {
+  //   liff.use(new GetOS());
+  //   setOs(liff.getOS());
+  //   await liff.init({ liffId: idcardliff }).then(async () => {
+  //     if (!liff.isLoggedIn()) {
+  //       liff.login();
+  //     } else {
+  //       const profile = await liff.getProfile();
+
+  //       // console.log(profile);
+  //       // console.log("profile?.userId", profile?.userId);
+  //       setProfile(profile);
+  //       setLineId(profile?.userId);
+
+  //       console.warn(lineId);
+
+  //       const dataSend = {
+  //         token_line: `${profile.userId}`,
+  //       };
+
+  //       const checkLineId = await axios.get(
+  //         `${pathUrl}/worker/checkline/${profile.userId}`
+  //       );
+  //       console.info(checkLineId.data);
+  //       console.log("res2", checkLineId.data);
+  //       console.log("checkLineId", checkLineId);
+  //       const getworker = await axios.get(
+  //         `${pathUrl}/worker/getdataworker/${checkLineId.data.message[0].cid}`
+  //       );
+  //       console.log("res", getworker.data.message[0]);
+  //       setData(getworker.data.message[0]);
+
+  //       if (checkLineId.data.message.length > 0) {
+  //         setLoading(false);
+  //         const stafftype = checkLineId.data.message[0];
+  //         setCheckuser(true);
+  //         setUser(checkLineId.data[0]);
+  //         updatePatient(checkLineId.data.message[0]);
+  //         console.log("userPatient", updatePatient);
+  //         setCid(checkLineId.data.message[0].cid);
+  //       } else {
+  //         router.push("/checkin/login?lineid=" + profile.userId);
+  //         setCheckuser(false);
+  //       }
+  //     }
+  //   });
+  //   await liff.ready;
+  // };
+
+  // const dataLine: any = async () => {
+  //   liff.use(new GetOS());
+  //   setOs(liff.getOS());
+  //   await liff.init({ liffId: idcardliff }).then(async () => {
+  //     if (!liff.isLoggedIn()) {
+  //       liff.login();
+  //     } else {
+  //       const profile = await liff.getProfile();
+  //       console.log(profile);
+  //       return { data: profile };
+  //     }
+  //   });
+  // };
+  // const useData: any = useQuery({
+  //   queryKey: ["dataline"],
+  //   queryFn: () => {
+  //     liff.use(new GetOS());
+  //     setOs(liff.getOS());
+  //     liff.init({ liffId: idcardliff }).then(async () => {
+  //       if (!liff.isLoggedIn()) {
+  //         liff.login();
+  //       } else {
+  //         const profile = await liff.getProfile();
+  //         console.log(profile);
+  //         return { data: profile };
+  //       }
+  //     });
+  //   },
+  // });
 
   const [os, setOs] = useState<string>();
 
@@ -25,72 +109,119 @@ function ChecklogPage() {
   const [lineId, setLineId] = useState("");
   const [cid, setCid] = useState("");
   const [User, setUser] = useState("");
+  const [lat, setLat] = useState("");
+  const [long, setlong] = useState("");
   const [loading, setLoading] = useState(true);
   const [checkUser, setCheckuser] = useState(true);
+  const [data, setData] = useState<any>({});
+  const [dataworker, setDataworker] = useState<any>({});
   const updatePatient: any = usePatientStore(
     (state: any) => state.updatePatient
   );
 
   const fnSetStep = (e: any) => {
     setStep(e);
-  }
-  useEffect(() => {
-    const initLiff = async () => {
-      liff.use(new GetOS());
-      setOs(liff.getOS());
-      await liff.init({ liffId: idcardliff }).then(async () => {
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          const profile = await liff.getProfile();
+    console.log("step", e);
+  };
+  const fnSetEmotion = (e: any) => {
+    setemotion(e);
+    console.log("emotion", e);
+  };
+  const fnlat = (e: any) => {
+    setLat(e);
+    console.log("emotion", e);
+  };
+  const fnLong = (e: any) => {
+    setlong(e);
+    console.log("emotion", e);
+  };
 
-          // console.log(profile);
-          // console.log("profile?.userId", profile?.userId);
-          setProfile(profile);
-          setLineId(profile?.userId);
+   useEffect(() => {
+     const initLiff = async () => {
+       liff.use(new GetOS());
+       setOs(liff.getOS());
+       await liff.init({ liffId: idcardliff }).then(async () => {
+         if (!liff.isLoggedIn()) {
+           liff.login();
+         } else {
+           const profile = await liff.getProfile();
 
-          console.warn(lineId);
+           // console.log(profile);
+           // console.log("profile?.userId", profile?.userId);
+           setProfile(profile);
+           setLineId(profile?.userId);
 
-          const dataSend = {
-            token_line: `${profile.userId}`,
-          };
+           console.warn(lineId);
 
-          const checkLineId = await axios.get(
-            `${pathUrl}/worker/checkline/${profile.userId}`
-          );
-          console.info(checkLineId.data);
-          console.log("res2", checkLineId.data);
-          console.log("checkLineId", checkLineId);
-          if (checkLineId.data.message.length > 0) {
-            setLoading(false);
-            const stafftype = checkLineId.data.message[0];
-            setCheckuser(true);
-            setUser(checkLineId.data[0]);
-            updatePatient(checkLineId.data.message[0]);
-            console.log("userPatient", updatePatient);
-            setCid(checkLineId.data.message[0].cid);
-            //  updatedata(checkLineId.data.message[0], `${profile.userId}`);
-            //    rout to page checkin...
-            // router.replace(
-            //   "/checkin/perfectdays?cid=" + checkLineId.data.message[0].cid + "&lineid=" + profile.userId
-            // );
-            //  console.log("check CID", checkLineId.data.message[0].cid);
-          } else {
-            router.push("/checkin/login?lineid=" + profile.userId);
-            setCheckuser(false);
-          }
-        }
-      });
-      await liff.ready;
-    };
+           const dataSend = {
+             token_line: `${profile.userId}`,
+           };
 
-    try {
-      initLiff();
-    } catch (e: any) {
-      console.error("liff init error", e.message);
-    }
-  }, [lineId]);
-console.log("datacid" + cid);
+           const checkLineId = await axios.get(
+             `${pathUrl}/worker/checkline/${profile.userId}`
+           );
+           console.info(checkLineId.data);
+           console.log("res2", checkLineId.data.message[0].cid);
+           console.log("checkLineId", checkLineId);
+            const getworker = await axios.get(
+              `${pathUrl}/worker/getdataworker/${checkLineId.data.message[0].cid}`
+            );
+           console.log("getWorker", getworker.data.message[0].cid);
+           setDataworker(getworker.data.message[0]);
+           console.log("SETDATA", getworker.data.message[0].emotion);
+          //  if (dataworker.clockin != null && dataworker.clockout != null) {
+             setStep(5)
+          
+           if (checkLineId.data.message.length > 0) {
+             setLoading(false);
+             const stafftype = checkLineId.data.message[0];
+             setCheckuser(true);
+            //  setUser(checkLineId.data[0]);
+            //  updatePatient(checkLineId.data.message[0]);
+             console.log("userPatient", updatePatient);
+             setCid(checkLineId.data.message[0].cid);
+             console.log("DATAWorker", dataworker.clockin)
+            //  if (dataworker.clockin != null && dataworker.clockout != null) {
+               if (
+                 getworker.data.message[0]?.emotion == null &&
+                 getworker.data.message[0]?.clockout != null &&
+                 getworker.data.message[0].clockin != null
+               ) {
+                 setStep(5);
+               } else {
+                 setStep(1);
+               }
+             
+             
+           } else {
+             router.push("/checkin/login?lineid=" + profile.userId);
+             setCheckuser(false);
+           }
+         }
+       });
+       await liff.ready;
+     };
+
+     try {
+       initLiff();
+     } catch (e: any) {
+       console.error("liff init error", e.message);
+     }
+   }, [lineId]);
+
+  
+  // if (useData.isFetching) {
+  //   // setLoading(true);
+  //   console.log("isfetching");
+  // }
+
+  // if (useData.isSuccess) {
+  //   setLoading(false);
+  //   console.log("useData.data");
+  //   console.log(useData.data);
+  // }
+ 
+
   return (
     <div>
       {loading ? (
@@ -111,8 +242,16 @@ console.log("datacid" + cid);
                   height={48}
                 ></Image>
               </div>
+
+              {/* {data.emotion != null ? setStep(5)} */}
               {step === 1 && (
-                <Checkintime line={lineId} datacid={cid} profile={profile} />
+                <Checkintime
+                  line={lineId}
+                  datacid={cid}
+                  profile={profile}
+                  fn={fnSetStep}
+                  
+                />
               )}
               {step === 2 && (
                 <Menuextclock
@@ -123,15 +262,20 @@ console.log("datacid" + cid);
                 />
               )}
               {step === 3 && (
-                <Extcomment
-                  line={lineId}
-                  datacid={cid}
-                  profile={profile}
-                 
-                />
+                <Extcomment line={lineId} datacid={cid} profile={profile} />
               )}
               {step === 4 && (
                 <Overtime line={lineId} datacid={cid} profile={profile} />
+              )}
+
+              {step === 5 && (
+                <MenuEmotion
+                  line={lineId}
+                  datacid={cid}
+                  profile={profile}
+                  fn={fnSetStep}
+                  emo={fnSetEmotion}
+                />
               )}
               {/* {step === 3 && } */}
               {/* ปุ่ม flip เพื่อพลิกด้านหลัง */}

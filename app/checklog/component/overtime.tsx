@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { Label } from "@/components/ui/label";
 import { useSearchParams } from "next/navigation";
+import dayjs from "dayjs";
+import Swal from "sweetalert2";
 interface dataProps {
   line: string;
   datacid: string;
@@ -85,7 +87,42 @@ const Overtime = ({ line, datacid, profile }: dataProps) => {
      //   const profile = await liff.getProfile();
      //   console.log("Profile", profile);
      // });
-   };
+  };
+  const postData = async () => {
+    const dataSend = {
+      ot_clockin: dayjs(new Date()).format("HH:mm"),
+      // clockout:dayjs(new Date).format("HH:mm"),
+      work_date: dayjs(new Date()).format("YYYY-MM-DD"),
+      worker_id: data.id,
+      ot_lat_in: lat1,
+      ot_long_in: long1,
+      typework: 1,
+    };
+    console.log("datasend", dataSend);
+    const res = await axios.post(`${pathUrl}/perfectdaysot`, dataSend);
+
+    // console.log("res send data", res.data);
+
+    if (res.data.ok) {
+      // alert("บันทึกข้อมูลสำเร็จ");
+      Swal.fire({
+        title: "SUCCESS!",
+        text: "บันทึกข้อมูลสำเร็จ",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+
+        // confirmButtonText: "รับทราบ!",
+      });
+      console.log("res overtime: ", res.data);
+      initial();
+      // location.reload();
+      // getData();
+    } else {
+      throw new Error(res.data.error);
+    }
+  };
   return (
     <div>
       <div className="containner mt-10 pt-10">
@@ -97,18 +134,9 @@ const Overtime = ({ line, datacid, profile }: dataProps) => {
           </div>
           {data.clockin != null && data.clockout != null ? (
             <div className="mt-1">
-              {distance < data.organize_radius? (
-                <Button className="border-4 bg-[#3956BF] border-gray w-[178px] h-[58px] text-xl cursor-pointer">
+              <Button className="border-4 bg-[#3956BF] border-gray w-[178px] h-[58px] text-xl cursor-pointer" onClick={postData}>
                 CLOCK IN
               </Button>
-              ):(
-                <div>
-            <Button className="border-4 bg-[#DFE0E1] border-white w-[178px] h-[58px] rounded-lg text-lg disabled:true ">
-              OUT OF RANGE
-            </Button>
-          </div>
-              )}
-              
             </div>
           ) : (
             <div className="  justify-items-center">

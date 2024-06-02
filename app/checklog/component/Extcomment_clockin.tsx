@@ -111,27 +111,22 @@ const Extcomment = ({ line, datacid, profile,fn }: dataProps) => {
 
     // }, [seconds, minutes, hours, date]);
   }, []);
-  const UpsDatalearn = async () => {
+  const postDatalearn = async () => {
       const dataSend = {
-      // clockin: dayjs(new Date()).format("HH:mm"),
-      clockout:dayjs(new Date).format("HH:mm"),
+      clockin: dayjs(new Date()).format("HH:mm"),
+      // clockout:dayjs(new Date).format("HH:mm"),
       work_date: dayjs(new Date()).format("YYYY-MM-DD"),
       worker_id: data.id,
-      lat_out: lat1,
-      long_out: long1,
-      typework_out: 2,
+      lat_in: lat1,
+      long_in: long1,
+      typework_in: 2,
     };
-    
-    
     console.log("datasend", dataSend);
-   const res_up = await axios.put(
-     `${pathUrl}/perfectdays/${data.transaction_id}`,
-     dataSend
-   );
+    const res = await axios.post(`${pathUrl}/perfectdays`, dataSend);
 
     // console.log("res send data", res.data);
 
-    if (res_up.data.ok) {
+    if (res.data.ok) {
       // alert("บันทึกข้อมูลสำเร็จ");
       Swal.fire({
         title: "SUCCESS!",
@@ -143,36 +138,31 @@ const Extcomment = ({ line, datacid, profile,fn }: dataProps) => {
 
         // confirmButtonText: "รับทราบ!",
       });
-      console.log("res : ", res_up.data);
+      console.log("res : ", res.data);
       initial();
-      fn(5);
+      fn(1);
       // location.reload();
       // getData();
     } else {
-      throw new Error(res_up.data.error);
+      throw new Error(res.data.error);
     }
   };
-  const UpsDataWFH = async () => {
+  const postDataWFH= async () => {
       const dataSend = {
-      // clockin: dayjs(new Date()).format("HH:mm"),
-      clockout:dayjs(new Date).format("HH:mm"),
+      clockin: dayjs(new Date()).format("HH:mm"),
+      // clockout:dayjs(new Date).format("HH:mm"),
       work_date: dayjs(new Date()).format("YYYY-MM-DD"),
       worker_id: data.id,
-      lat_out: lat1,
-      long_out: long1,
-      typework_out: 3,
+      lat_in: lat1,
+      long_in: long1,
+      typework_in: 3,
     };
-    
-    
     console.log("datasend", dataSend);
-    const res_up = await axios.put(
-      `${pathUrl}/perfectdays/${data.transaction_id}`,
-      dataSend
-    );
+    const res = await axios.post(`${pathUrl}/perfectdays`, dataSend);
 
     // console.log("res send data", res.data);
 
-    if (res_up.data.ok) {
+    if (res.data.ok) {
       // alert("บันทึกข้อมูลสำเร็จ");
       Swal.fire({
         title: "SUCCESS!",
@@ -184,36 +174,31 @@ const Extcomment = ({ line, datacid, profile,fn }: dataProps) => {
 
         // confirmButtonText: "รับทราบ!",
       });
-      console.log("res : ", res_up.data);
+      console.log("res : ", res.data);
       initial();
-      fn(5);
+      fn(1);
       // location.reload();
       // getData();
     } else {
-      throw new Error(res_up.data.error);
+      throw new Error(res.data.error);
     }
   };
-  const UpsDataOut = async () => {
+  const postDataOUT= async () => {
       const dataSend = {
-      // clockin: dayjs(new Date()).format("HH:mm"),
-      clockout:dayjs(new Date).format("HH:mm"),
+      clockin: dayjs(new Date()).format("HH:mm"),
+      // clockout:dayjs(new Date).format("HH:mm"),
       work_date: dayjs(new Date()).format("YYYY-MM-DD"),
       worker_id: data.id,
-      lat_out: lat1,
-      long_out: long1,
-      typework_out: 4,
+      lat_in: lat1,
+      long_in: long1,
+      typework_in: 4,
     };
-    
-    
     console.log("datasend", dataSend);
-    const res_up = await axios.put(
-      `${pathUrl}/perfectdays/${data.transaction_id}`,
-      dataSend
-    );
+    const res = await axios.post(`${pathUrl}/perfectdays`, dataSend);
 
     // console.log("res send data", res.data);
 
-    if (res_up.data.ok) {
+    if (res.data.ok) {
       // alert("บันทึกข้อมูลสำเร็จ");
       Swal.fire({
         title: "SUCCESS!",
@@ -225,12 +210,13 @@ const Extcomment = ({ line, datacid, profile,fn }: dataProps) => {
 
         // confirmButtonText: "รับทราบ!",
       });
-      console.log("res : ", res_up.data);
+      console.log("res : ", res.data);
       initial();
-fn(5);      // location.reload();
+      fn(1);
+      // location.reload();
       // getData();
     } else {
-      throw new Error(res_up.data.error);
+      throw new Error(res.data.error);
     }
   };
   
@@ -239,18 +225,26 @@ fn(5);      // location.reload();
       <div className="container mb-20">
         <div className="flex flex-col  items-center gap-2  ">
           <div className="justify-items-center">
-            
-            <Button onClick={UpsDatalearn} className="border-4 bg-[#E97132] border-gray w-[228px] h-[56px] text-[24px] cursor-pointer shadow-lg rounded-lg ">
+            <Button
+              onClick={postDatalearn}
+              className="border-4 bg-[#E97132] border-gray w-[228px] h-[56px] text-[24px] cursor-pointer shadow-lg rounded-lg "
+            >
               อบรมนอกสถานที่
             </Button>
           </div>
           <div className="justify-items-center">
-            <Button onClick={UpsDataWFH} className="border-4 bg-[#E97132] border-gray w-[228px] h-[56px] text-[24px] cursor-pointer shadow-lg rounded-lg ">
+            <Button
+              onClick={postDataWFH}
+              className="border-4 bg-[#E97132] border-gray w-[228px] h-[56px] text-[24px] cursor-pointer shadow-lg rounded-lg "
+            >
               Work From Home
             </Button>
           </div>
           <div className="justify-items-center ">
-            <Button onClick={UpsDataOut}  className="border-4 bg-[#8C123E] border-gray w-[228px] h-[56px] text-[16px] cursor-pointer shadow-lg rounded-lg  ">
+            <Button
+              onClick={postDataOUT}
+              className="border-4 bg-[#8C123E] border-gray w-[228px] h-[56px] text-[16px] cursor-pointer shadow-lg rounded-lg  "
+            >
               ออกนอกสถานที่มาแล้ว
             </Button>
           </div>

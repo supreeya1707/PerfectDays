@@ -12,10 +12,10 @@ import Menuextclock from "./component/Menuextclock";
 import Checkintime from "./component/checkintime";
 import Overtime from "./component/overtime";
 import Extcomment from "./component/Extcomment";
+import Extcomment_clockin from "./component/Extcomment_clockin";
 import MenuEmotion from "./component/MenuEmotion";
 import dayjs from "dayjs";
 import { useQuery } from "@tanstack/react-query";
-
 function ChecklogPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
@@ -209,7 +209,9 @@ function ChecklogPage() {
      }
    }, [lineId]);
 
+  console.log("dataworker", dataworker.emotion);
   
+
   // if (useData.isFetching) {
   //   // setLoading(true);
   //   console.log("isfetching");
@@ -250,7 +252,6 @@ function ChecklogPage() {
                   datacid={cid}
                   profile={profile}
                   fn={fnSetStep}
-                  
                 />
               )}
               {step === 2 && (
@@ -262,10 +263,20 @@ function ChecklogPage() {
                 />
               )}
               {step === 3 && (
-                <Extcomment line={lineId} datacid={cid} profile={profile} />
+                <Extcomment
+                  line={lineId}
+                  datacid={cid}
+                  profile={profile}
+                  fn={fnSetStep}
+                />
               )}
               {step === 4 && (
-                <Overtime line={lineId} datacid={cid} profile={profile} />
+                <Overtime
+                  line={lineId}
+                  datacid={cid}
+                  profile={profile}
+                  fn={fnSetStep}
+                />
               )}
 
               {step === 5 && (
@@ -275,6 +286,14 @@ function ChecklogPage() {
                   profile={profile}
                   fn={fnSetStep}
                   emo={fnSetEmotion}
+                />
+              )}
+              {step === 6 && (
+                <Extcomment_clockin
+                  line={lineId}
+                  datacid={cid}
+                  profile={profile}
+                  fn={fnSetStep}
                 />
               )}
               {/* {step === 3 && } */}

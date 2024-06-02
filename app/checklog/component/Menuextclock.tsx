@@ -59,7 +59,7 @@ const Menuextclock = ({ line, datacid, profile, fn }: dataProps) => {
             <div>
               <Button
                 className="border-4 bg-[#3956BF] border-gray w-[228px] h-[58px] text-[24px] cursor-pointer"
-                onClick={() => fn(3)}
+                onClick={() => fn(6)}
               >
                 Ext. CLOCK IN
               </Button>

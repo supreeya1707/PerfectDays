@@ -126,10 +126,10 @@ const Checkintime = ({
         const d: number = haversine(
           res.data.message[0].organize_lat,
           res.data.message[0].organize_long,
-          13.530873, 99.816264
+          // 13.530873, 99.816264
           
-          // position.coords.latitude,
-          // position.coords.longitude
+          position.coords.latitude,
+          position.coords.longitude
         );
         // fnlat(position.coords.latitude);
         //   fnLong(position.coords.longitude);
@@ -230,6 +230,7 @@ const Checkintime = ({
       clockout: dayjs(new Date()).format("HH:mm"),
       lat_out: lat1,
       long_out: long1,
+      typework_out:1
       
     };
     console.log("datasend", dataSend);

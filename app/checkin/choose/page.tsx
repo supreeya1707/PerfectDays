@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { setInterval } from "timers";
 import { useRouter, useSearchParams } from "next/navigation";
 // import frontcard from "@/app/choose/components/frontcard"
-import PerfectdaysPage from "../perfectdays/page";
+
 // import Extclockpage from "../Extclock/page";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";
@@ -30,18 +30,9 @@ import axios from "axios";
 
 
 
-interface dataProps {
-  line: string;
-  datacid: string;
-  profile: Profile;
-}
-interface Profile {
-  userId: string;
-  displayName: string;
-  pictureUrl: string;
-}
 
-function ChoosePage({ line, datacid, profile }: dataProps) {
+
+function ChoosePage() {
   const pathUrl: any = process.env.pathUrl;
   const searchParams = useSearchParams();
   const cid = searchParams.get("cid");

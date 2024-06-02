@@ -175,7 +175,10 @@ const Checkintime = ({
 
     return () => clearInterval(intervalId);
   }, 1000);
-  }, []);
+  }, [line,
+    datacid,
+    profile,
+    fn]);
 
   // console.log("data cide", data.cid);
   // console.log("datadistance", distance);
@@ -301,7 +304,7 @@ const Checkintime = ({
             ></Image>
           </div>
 
-          <div className=" grid grid grid-flow-row auto-rows-max justify-self-center  ">
+          <div className=" grid grid grid-flow-row auto-rows-max justify-self-center mt-5 ">
             {/* <div className=" grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1  items-center"> */}
             <div className="textdescrip text-2xl mt-2">
               <h3>{data.fname + " " + data.lname}</h3>

@@ -349,7 +349,7 @@ const Checkintime = ({
                     )}
                   </div>
                 )}
-                <div className="mt-3 mb-6">
+                <div className=" mb-5">
                   <div
                     className="text-[16px]  text-start
                     text-[#8F8B8B] "
@@ -454,7 +454,7 @@ const Checkintime = ({
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center mt-5 ">
               <div className="flex flex-row">
                 <div className="justify-self-center  text-4xl">
                   {hours}:{minutes}:{seconds}

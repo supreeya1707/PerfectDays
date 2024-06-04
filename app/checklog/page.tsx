@@ -298,7 +298,7 @@ function ChecklogPage() {
               )}
               {/* {step === 3 && } */}
               {/* ปุ่ม flip เพื่อพลิกด้านหลัง */}
-              <div className="absolute  -bottom-2 right-2 ">
+              <div className="absolute  -bottom-2 right-3 ">
                 <Image
                   className="mt-2 cursor-pointer"
                   onClick={() => {

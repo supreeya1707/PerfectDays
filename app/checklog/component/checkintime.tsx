@@ -199,7 +199,7 @@ const Checkintime = ({
       worker_id: data.id,
       lat_in: lat1,
       long_in: long1,
-      typework: 1,
+      typework_in: 1,
     };
     console.log("datasend", dataSend);
     const res = await axios.post(`${pathUrl}/perfectdays`, dataSend);

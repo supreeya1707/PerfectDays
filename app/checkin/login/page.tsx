@@ -24,6 +24,7 @@ import axios from "axios";
 import liff from "@line/liff";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { usePatientStore } from "@/app/store";
 const LoginFormSchema = z.object({
   cid: z.string({ required_error: "กรุณาใส่ Username" }),
   passcode: z.string({ required_error: "กรุณาใส่ Password" }),
@@ -36,7 +37,9 @@ function LoginPage() {
   const searchParams = useSearchParams();
   const lineid = searchParams.get("lineid");
   const [profile, setProfile] = useState<any>({});
-  
+    const updatePatient: any = usePatientStore(
+      (state: any) => state.updatePatient
+    );
   const [lineId, setLineId] = useState("");
   // form
   const form = useForm<z.infer<typeof LoginFormSchema>>({
@@ -46,9 +49,12 @@ function LoginPage() {
       passcode: "",
     },
   });
+  
   // Submit
   const onSubmit = async (data: LoginFormValues) => {
     console.log("data", data);
+     
+    // ดึงข้อมูลจาก API
     const res = await axios.post(`${pathUrl}/worker/checklogin`, {
       // cid:"1329900007811",
       lineid: lineid,
@@ -69,7 +75,10 @@ function LoginPage() {
         // const dataSend = {
         //   token_line: `${profile.userId}`,
         // };
-        router.push("/checkin/perfectdays?cid=" + res.data.message.cid );
+        updatePatient(res.data);
+        console.log('updatePatient', updatePatient);
+        // updatedata(res.data.message[0], `${profile.userId}`);
+        router.push("/checkin/perfectdays?cid=" + res.data.message.cid +"&lineid=" + lineid);
       }
       else {
         Swal.fire({
@@ -149,5 +158,7 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
+
 
 

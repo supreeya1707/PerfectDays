@@ -11,6 +11,9 @@ const nextConfig = {
     env: {
         pathUrl: `https://lineapi.hyggecode.com/hyggemain/perfectdays`,
         idcardliff: '2004162856-J7ZmzjQq',
+        // idcardliff: '2004162856-WoQ6qjgb',
+        profileliff: '2004162856-EDrqgaL0',
+        lifftest: '2004162856-WoQ6qjgb',
         API_KEY:'AIzaSyA5S111okudFrxg46QUXgqnUM0kZoGJ2S4',
         
 

@@ -466,7 +466,7 @@ function TimeLinePage() {
         </div>
       </div>
 
-      <div className="bg-[#E7F5FF] w-full mt-3 pb-3 h-[500px] max-h-svh hover:max-h-screen">
+      <div className="bg-[#E7F5FF] w-full mt-3 pb-10 h-full max-h-svh hover:max-h-screen">
         <div className="container">
           <div className="flex flex-col">
             <div className="flex flex-row items-center py-3 justify-center">

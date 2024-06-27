@@ -227,9 +227,9 @@ const Extcomment = ({ line, datacid, profile,fn }: dataProps) => {
           <div className="justify-items-center">
             <Button
               onClick={postDatalearn}
-              className="border-4 bg-[#E97132] border-gray w-[228px] h-[56px] text-[24px] cursor-pointer shadow-lg rounded-lg "
+              className="border-4 bg-[#E97132] border-gray w-[228px] h-[56px] text-[17px] cursor-pointer shadow-lg rounded-lg "
             >
-              อบรมนอกสถานที่
+              ปฏิบัติงาน / อบรมนอกสถานที่
             </Button>
           </div>
           <div className="justify-items-center">

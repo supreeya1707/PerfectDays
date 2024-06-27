@@ -38,9 +38,9 @@ import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 import { createTheme } from "@mui/material/styles";
 import { Kanit } from "next/font/google";
 import { fontFamily } from "@mui/system";
+
 // import { DefaultizedPieValueType } from "@mui/x-charts";
 // dayjs.extend(customParseFormat);
-
 
 const inter = Kanit({
   subsets: ["latin"],
@@ -91,6 +91,7 @@ function TimeLinePage() {
   const dateNow = new Date();
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [datalog, setDatalog] = React.useState([]);
+  const [datalogOT, setDatalogOT] = React.useState([]);
   const [count, setCount] = React.useState([]);
   const [emotinPerfect, setEmotinPerfect] = React.useState(0);
   const [emotinHappy, setEmotinHappy] = React.useState(0);
@@ -107,128 +108,99 @@ function TimeLinePage() {
   const [dataAllTime, setdataAllTime] = React.useState<any>(0);
   const [dataOnTime, setdataOnTime] = React.useState<any>(0);
   const [dataLateTime, setdataLateTime] = React.useState<any>(0);
+  const [combinedData, setCombinedData] = useState([]);
+  const theme = createTheme({
+    typography: {
+      fontFamily: ["Kanit"].join(","),
+    },
+  });
+
   console.log(datalog);
   const pathUrl: any = process.env.pathUrl;
   const searchParams = useSearchParams();
   const lineid = searchParams.get("lineid");
   const monthFormat = "MMMM BBBB";
+  let dataMapShow: any = {};
+
   const getdataLateTime = async () => {
     const restime = await axios.get(
       `${pathUrl}/worker/checkdepartment/${lineid}`
-
     );
     console.log(restime);
-  }
-  const getData = async () => {
+  };
+  const formatTime = (time: any) => {
+    if (!time) return "";
+    const [hours, minutes] = time.split(":");
+    return `${hours}:${minutes}`;
+  };
+  const getDataOT = async (dmonth: any, dyear: any) => {
     setLoading(true);
-    const res = await axios.get(
-      `${pathUrl}/perfectdays/profile/${month}/${year}/${lineid}`
+    const resot: any = await axios.get(
+      `${pathUrl}/perfectdaysot/profile/${dmonth}/${dyear}/${lineid}`
     );
-
-    console.log("res", res);
+    const res: any = await axios.get(
+      `${pathUrl}/perfectdays/profile/${dmonth}/${dyear}/${lineid}`
+    );
+    setDatalogOT(resot.data.message);
     setDatalog(res.data.message);
-    const perfect = res.data.message.filter((v: any) => {
-      if (v.emotion == 4) {
-        return v;
-      }
-    });
-    const happy = res.data.message.filter((v: any) => {
-      if (v.emotion == 3) {
-        return v;
-      }
-    });
-    const everage = res.data.message.filter((v: any) => {
-      if (v.emotion == 2) {
-        return v;
-      }
-    });
-    const poor = res.data.message.filter((v: any) => {
-      if (v.emotion == 1) {
-        return v;
-      }
-    });
+    console.log("Length", datalogOT.length);
 
-    const lateTime = res.data.message.filter((v: any) => {
-      if (v.clockin > "09:00") {
-        return v;
-      }
-    }).length;
-
-    const onTime = res.data.message.filter((v: any) => {
-      if (v.clockin <= "09:00") {
-        return v;
-      }
-    }).length;
-
+    const combined = resot.data.message
+      .map((item: any, index: number) => {
+        return {
+          workdate: item.work_date,
+          otclockin: item.ot_clockin,
+          otclockout: item.ot_clockout,
+        };
+      })
+      .concat(
+        res.data.message.map((item: any) => {
+          return {
+            workdate: item.work_date,
+            clockin: item.clockin,
+            clockout: item.clockout,
+          };
+        })
+      );
+    // Sort combined data by workdate in ascending order
+    combined.sort(
+      (a: any, b: any) =>
+        new Date(b.workdate).getDate() - new Date(a.workdate).getDate()
+    );
+    console.log("DATAOT", resot.data.message);
+    console.log("DATALOGH", res.data.message.length);
+    console.log("combinedData", combined);
+    setCombinedData(combined);
+    const perfect = res.data.message.filter((v: any) => v.emotion == 4);
+    const happy = res.data.message.filter((v: any) => v.emotion == 3);
+    const everage = res.data.message.filter((v: any) => v.emotion == 2);
+    const poor = res.data.message.filter((v: any) => v.emotion == 1);
+    console.log("perfect", perfect.length);
+    console.log("happy", happy.length);
+    console.log("everage", everage.length);
+    console.log("poor", poor.length);
+    const lateTime = res.data.message.filter(
+      (v: any) => v.clockin > "09:00"
+    ).length;
+    const onTime = res.data.message.filter(
+      (v: any) => v.clockin <= "09:00"
+    ).length;
     const allTime = res.data.message.length;
     setdataAllTime(allTime);
     setdataLateTime(lateTime);
     setdataOnTime(onTime);
-    console.log("onTime: " + dataOnTime);
-    console.log("happy", happy);
+
     setEmotinPerfect(perfect.length);
     setEmotinHappy(happy.length);
     setEmotinEverage(everage.length);
     setEmotinPoor(poor.length);
-    console.log("datalog: " + datalog);
-    setLoading(false);
-  };
-
-  const getData2 = async (dmonth: any, dyear: any) => {
-    setLoading(true);
-    const res = await axios.get(
-      `${pathUrl}/perfectdays/profile/${dmonth}/${dyear}/${lineid}`
-    );
-
-    console.log("res", res);
-    setDatalog(res.data.message);
-    //check emotion when user click
-    const perfect = res.data.message.filter((v: any) => {
-      if (v.emotion == 4) {
-        return v;
-      }
-    });
-    const happy = res.data.message.filter((v: any) => {
-      if (v.emotion == 3) {
-        return v;
-      }
-    });
-    const everage = res.data.message.filter((v: any) => {
-      if (v.emotion == 2) {
-        return v;
-      }
-    });
-    const poor = res.data.message.filter((v: any) => {
-      if (v.emotion == 1) {
-        return v;
-      }
-    });
-
-    const lateTime = res.data.message.filter((v: any) => {
-      if (v.clockin > "09:00") {
-        return v;
-      }
-    }).length;
-
-    const onTime = res.data.message.filter((v: any) => {
-      if (v.clockin <= "09:00") {
-        return v;
-      }
-    }).length;
-
-    const allTime = res.data.message.length;
-    setdataAllTime(allTime);
-    setdataLateTime(lateTime);
-    setdataOnTime(onTime);
+    console.log("POOR", everage);
     console.log("lateTime", lateTime);
     console.log("onTime", dataOnTime);
     console.log("allTime", allTime);
-    console.log("happy", happy);
-    setEmotinPerfect(perfect.length);
-    setEmotinHappy(happy.length);
-    setEmotinEverage(everage.length);
-    setEmotinPoor(poor.length);
-    console.log("datalog: " + datalog);
+    console.log("happy", emotinHappy);
+
+    console.log("onTime: " + dataOnTime);
     setLoading(false);
   };
 
@@ -238,34 +210,23 @@ function TimeLinePage() {
       const getyear: any = {};
       getyear.value = i;
       getyear.label = i + 543;
-      yy.push(getYear);
+      yy.push(getyear);
     }
     console.log(yy);
     setDataYear(yy);
-
-    getData();
   }, []);
 
-  //chang value in calendar
   const onChange: DatePickerProps["onChange"] = async (date, dateString) => {
+    dataMapShow = {};
     await setdateInput(date);
     await setyear(dayjs(date).year());
     await setmonth(dayjs(date).month() + 1);
     console.log("date", dayjs(date).format("MM").toString());
     console.log("1", dayjs(date).month() + 1);
     console.log("dateString", dateString);
-    await getData2(dayjs(date).month() + 1, dayjs(date).year());
+    // await getData2(dayjs(date).month() + 1, dayjs(date).year());
+    await getDataOT(dayjs(date).month() + 1, dayjs(date).year());
   };
-
-  console.log("DateNow", dateInput);
-  console.log("year", year);
-  console.log("month", month);
-  const theme = createTheme({
-    typography: {
-      fontFamily: ["Kanit"].join(","),
-    },
-  });
- 
   return (
     <div className="">
       <div className=" grid grid grid-flow-row auto-rows-max justify-self-center content-start">
@@ -502,28 +463,30 @@ function TimeLinePage() {
               <div className="text-center">Loading..</div>
             ) : (
               <div>
-                {datalog.map((v: any, index: any) => {
+                {combinedData.map((v: any, index: any) => {
                   return (
                     <div
-                      className="flex flex-row items-center mt-1"
+                      className={v.clockin ? "flex flex-row items-center mt-1" : "flex flex-row items-center text-red-500"}
                       key={index}
                     >
-                      <div className="  text-black  basis-1/3 text-center">
-                        {dayjs(v.work_date)
+                      <div className="   basis-1/3 text-center">
+                        {dayjs(v.workdate)
                           .locale("th")
                           .add(543, "years")
                           .format("DD MMM YYYY")}
                       </div>
                       <div className="basis-1/3">
-                        <div className="flex flex-row justify-center">
-                          {v.clockin.toString().substring(0, 5)}
+                        <div className="flex flex-row  justify-center">
+                          {v.clockin
+                            ? formatTime(v.clockin)
+                            : formatTime(v.otclockin)}
                         </div>
                       </div>
                       <div className="basis-1/3">
-                        <div className="flex flex-row justify-center">
+                        <div className="flex flex-row  justify-center">
                           {v.clockout
-                            ? v.clockout.toString().substring(0, 5)
-                            : ""}
+                            ? formatTime(v.clockout)
+                            : formatTime(v.otclockout)}
                         </div>
                       </div>
                     </div>
@@ -534,7 +497,6 @@ function TimeLinePage() {
           </div>
         </div>
       </div>
-     
     </div>
   );
 }

@@ -15,6 +15,7 @@ import GetOSModule from "@line/liff/get-os";
 import { profile } from "console";
 import GetOS from "@line/liff/get-os";
 import MenuEmotion from "./MenuEmotion";
+import { positions } from "@mui/system";
 // import Clock from "./clock";
 // import Clock from "react-live-clock";=
 
@@ -74,6 +75,7 @@ const Checkintime = ({
   const [lineId, setLineId] = useState("");
   const [image, setimage] = useState("");
   const r = 6371;
+    const today = new Date();
 
   function haversine(lat1: any, lon1: any, lat2: any, lon2: any) {
     const R = 6371; // รัศมีของโลก (เช่น เมตร)
@@ -100,6 +102,11 @@ const Checkintime = ({
   //     console.log("ระยะห่าง", distance);
   //   }
   // };
+  const formatDate = (date:any) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return date.toLocaleDateString("th-TH", options);
+  };
+
   const getProfile = async () => {
     await liff.init({ liffId: idcardliff }).then(async () => {
       const profile: any = await liff.getProfile();
@@ -134,6 +141,7 @@ const Checkintime = ({
         // fnlat(position.coords.latitude);
         //   fnLong(position.coords.longitude);
         console.log("ddd", position.coords.latitude);
+       
         setDistance(d * 1000);
         console.log("datadis", distance);
         setData(res.data.message[0]);
@@ -150,8 +158,9 @@ const Checkintime = ({
     //   const profile = await liff.getProfile();
     //   console.log("Profile", profile);
     // });
+   
   };
-
+  
   useEffect(() => {
     initial();
     getProfile();
@@ -364,7 +373,7 @@ const Checkintime = ({
                   <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-1 justify-self-center mb-6">
                     <Button
                       className="border-4 bg-[#3956BF] border-gray w-[178px] h-[58px] text-3xl cursor-pointer"
-                      onClick={postData } 
+                      onClick={postData}
                     >
                       CLOCK IN
                     </Button>
@@ -454,10 +463,15 @@ const Checkintime = ({
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center mt-5 ">
+            <div className="flex flex-col items-center mt-3 ">
               <div className="flex flex-row">
                 <div className="justify-self-center  text-4xl">
                   {hours}:{minutes}:{seconds}
+                </div>
+              </div>
+              <div className="flex flex-row">
+                <div className="justify-self-center  text-2xl">
+                  {formatDate(today)}
                 </div>
               </div>
 

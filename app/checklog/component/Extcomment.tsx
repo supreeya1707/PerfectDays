@@ -240,8 +240,8 @@ fn(5);      // location.reload();
         <div className="flex flex-col  items-center gap-2  ">
           <div className="justify-items-center">
             
-            <Button onClick={UpsDatalearn} className="border-4 bg-[#E97132] border-gray w-[228px] h-[56px] text-[24px] cursor-pointer shadow-lg rounded-lg ">
-              อบรมนอกสถานที่
+            <Button onClick={UpsDatalearn} className="border-4 bg-[#E97132] border-gray w-[228px] h-[56px] text-[17px] cursor-pointer shadow-lg rounded-lg ">
+              ปฏิบัติงาน / อบรมนอกสถานที่
             </Button>
           </div>
           <div className="justify-items-center">

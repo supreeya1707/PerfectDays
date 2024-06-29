@@ -24,8 +24,6 @@ interface dataProps {
   datacid: string;
   profile: Profile;
   fn: any;
-  
-  
 }
 interface Profile {
   userId: string;
@@ -33,14 +31,7 @@ interface Profile {
   pictureUrl: string;
 }
 
-
-const Checkintime = ({
-  line,
-  datacid,
-  profile,
-  fn,
-  
-}: dataProps) => {
+const Checkintime = ({ line, datacid, profile, fn }: dataProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -75,7 +66,7 @@ const Checkintime = ({
   const [lineId, setLineId] = useState("");
   const [image, setimage] = useState("");
   const r = 6371;
-    const today = new Date();
+  const today = new Date();
 
   function haversine(lat1: any, lon1: any, lat2: any, lon2: any) {
     const R = 6371; // รัศมีของโลก (เช่น เมตร)
@@ -102,30 +93,31 @@ const Checkintime = ({
   //     console.log("ระยะห่าง", distance);
   //   }
   // };
-  const formatDate = (date:any) => {
+  const formatDate = (date: any) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return date.toLocaleDateString("th-TH", options);
   };
 
-  const getProfile = async () => {
-    await liff.init({ liffId: idcardliff }).then(async () => {
-      const profile: any = await liff.getProfile();
-      // const idToken=liff.getIdToken();
-      console.log("Profile", profile);
-      setProfileid(profile);
-      setLineId(profile?.userId);
-      setLineId(profile?.userId);
-      setimage(profile?.pictureUrl);
-      console.warn(lineId);
-    });
-    await liff.ready;
-  };
+  // const getProfile = async () => {
+  //   await liff.init({ liffId: idcardliff }).then(async () => {
+  //     const profile: any = await liff.getProfile();
+  //     // const idToken=liff.getIdToken();
+  //     console.log("Profile", profile);
+  //     setProfileid(profile);
+  //     setLineId(profile?.userId);
+  //     setLineId(profile?.userId);
+  //     setimage(profile?.pictureUrl);
+  //     console.warn(lineId);
+  //   });
+  //   await liff.ready;
+  // };
 
   const initial = async () => {
     setLoading(true);
     const res = await axios.get(`${pathUrl}/worker/getdataworker/${datacid}`);
     console.log(res.data);
     if (res.data.ok) {
+      setData(res.data.message[0]);
       await navigator.geolocation.getCurrentPosition(async (position: any) => {
         setLat1(position.coords.latitude);
         setLong1(position.coords.longitude);
@@ -134,17 +126,17 @@ const Checkintime = ({
           res.data.message[0].organize_lat,
           res.data.message[0].organize_long,
           // 13.530873, 99.816264
-          
+
           position.coords.latitude,
           position.coords.longitude
         );
         // fnlat(position.coords.latitude);
         //   fnLong(position.coords.longitude);
         console.log("ddd", position.coords.latitude);
-       
+
         setDistance(d * 1000);
         console.log("datadis", distance);
-        setData(res.data.message[0]);
+
         setcheckclockin(res.data.message[0].clockin);
         setcheckclockout(res.data.message[0].clockout);
         // setName( res.data.message[0].fname + " "+res.data.message[0].lname);
@@ -158,36 +150,44 @@ const Checkintime = ({
     //   const profile = await liff.getProfile();
     //   console.log("Profile", profile);
     // });
-   
   };
-  
+
   useEffect(() => {
     initial();
-    getProfile();
+    // getProfile();
+    // if (lat1 == null && long1 == null) {
+    //   Swal.fire({
+    //     title: "WARNING!!!!!!",
+    //     text: "กรุณาเปิด GPS ก่อนใช้งาน",
+    //     icon: "warning",
+    //     timer: 9000,
+    //     showConfirmButton: false,
+    //     allowOutsideClick: false,
 
-  const intervalId = setInterval(() => {
-    let d = new Date();
-    var h = d.getHours().toString();
-    var m = d.getMinutes().toString();
-    var s = d.getSeconds().toString();
+    //     // confirmButtonText: "รับทราบ!",
+    //   });
+    // }
 
-    var z =
-      d.getDate().toString().padStart(2, "0") +
-      " / " +
-      (d.getMonth() + 1).toString().padStart(2, "0") +
-      " / " +
-      d.getFullYear();
-    setDate(z);
-    setHours(h.padStart(2, "0"));
-    setMinutes(m.padStart(2, "0"));
-    setSeconds(s.padStart(2, "0"));
+    const intervalId = setInterval(() => {
+      let d = new Date();
+      var h = d.getHours().toString();
+      var m = d.getMinutes().toString();
+      var s = d.getSeconds().toString();
 
-    return () => clearInterval(intervalId);
-  }, 1000);
-  }, [line,
-    datacid,
-    profile,
-    fn]);
+      var z =
+        d.getDate().toString().padStart(2, "0") +
+        " / " +
+        (d.getMonth() + 1).toString().padStart(2, "0") +
+        " / " +
+        d.getFullYear();
+      setDate(z);
+      setHours(h.padStart(2, "0"));
+      setMinutes(m.padStart(2, "0"));
+      setSeconds(s.padStart(2, "0"));
+
+      return () => clearInterval(intervalId);
+    }, 1000);
+  }, [line, datacid, profile, fn]);
 
   // console.log("data cide", data.cid);
   // console.log("datadistance", distance);
@@ -228,7 +228,7 @@ const Checkintime = ({
         // confirmButtonText: "รับทราบ!",
       });
       console.log("res : ", res.data);
-     initial();
+      initial();
       // location.reload();
       // getData();
     } else {
@@ -242,11 +242,10 @@ const Checkintime = ({
       clockout: dayjs(new Date()).format("HH:mm"),
       lat_out: lat1,
       long_out: long1,
-      typework_out:1
-      
+      typework_out: 1,
     };
     console.log("datasend", dataSend);
- 
+
     const res_up = await axios.put(
       `${pathUrl}/perfectdays/${data.transaction_id}`,
       dataSend
@@ -254,16 +253,16 @@ const Checkintime = ({
     console.log("res send data", res_up.data);
 
     if (res_up.data.ok) {
-       Swal.fire({
-         title: "SUCCESS!",
-         text: "บันทึกข้อมูลสำเร็จ",
-         icon: "success",
-         timer: 1500,
-         showConfirmButton: false,
-         allowOutsideClick: false,
+      Swal.fire({
+        title: "SUCCESS!",
+        text: "บันทึกข้อมูลสำเร็จ",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+        allowOutsideClick: false,
 
-         // confirmButtonText: "รับทราบ!",
-       });
+        // confirmButtonText: "รับทราบ!",
+      });
       // getData();
       fn(5);
     } else {

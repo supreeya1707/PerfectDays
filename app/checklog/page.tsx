@@ -26,7 +26,8 @@ function ChecklogPage() {
 
 
   const [os, setOs] = useState<string>();
-
+  const [lat1, setLat1] = useState<any>({});
+  const [long1, setLong1] = useState<any>({});
   const [profile, setProfile] = useState<any>({});
   const [lineId, setLineId] = useState("");
   const [cid, setCid] = useState("");
@@ -40,6 +41,21 @@ function ChecklogPage() {
   const updatePatient: any = usePatientStore(
     (state: any) => state.updatePatient
   );
+   function haversine(lat1: any, lon1: any, lat2: any, lon2: any) {
+     const R = 6371; // รัศมีของโลก (เช่น เมตร)
+
+     console.log(lat1, lon1, lat2, lon2);
+     const dLat = (lat2 - lat1) * (Math.PI / 180);
+     const dLon = (lon2 - lon1) * (Math.PI / 180);
+     const a =
+       Math.sin(dLat / 2) ** 2 +
+       Math.cos(lat1 * (Math.PI / 180)) *
+         Math.cos(lat2 * (Math.PI / 180)) *
+         Math.sin(dLon / 2) ** 2;
+     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+     const distance = R * c;
+     return distance;
+   }
 
   const fnSetStep = (e: any) => {
     setStep(e);
@@ -88,7 +104,7 @@ function ChecklogPage() {
             const getworker = await axios.get(
               `${pathUrl}/worker/getdataworker/${checkLineId.data.message[0].cid}`
             );
-           console.log("getWorker", getworker.data.message[0].cid);
+           console.log("getWorker", getworker.data.message[0]);
            setDataworker(getworker.data.message[0]);
            console.log("SETDATA", getworker.data.message[0].emotion);
           //  if (dataworker.clockin != null && dataworker.clockout != null) {
@@ -103,6 +119,23 @@ function ChecklogPage() {
              console.log("userPatient", updatePatient);
              setCid(checkLineId.data.message[0].cid);
              console.log("DATAWorker", dataworker.clockin)
+             await navigator.geolocation.getCurrentPosition(
+               async (position: any) => {
+                 setLat1(position.coords.latitude);
+                 setLong1(position.coords.longitude);
+                 console.log("SET lat", position.coords.latitude);
+                 const d: number = haversine(
+                   getworker.data.message[0].organize_lat,
+                   getworker.data.message[0].organize_long,
+                   // 13.530873, 99.816264
+
+                   position.coords.latitude,
+                   position.coords.longitude
+                   
+                 );
+               }
+             );
+             
             //  if (dataworker.clockin != null && dataworker.clockout != null) {
                if (
                  getworker.data.message[0]?.emotion == null &&
@@ -132,19 +165,8 @@ function ChecklogPage() {
    }, [lineId]);
 
   console.log("dataworker", dataworker.emotion);
-  
-
-  // if (useData.isFetching) {
-  //   // setLoading(true);
-  //   console.log("isfetching");
-  // }
-
-  // if (useData.isSuccess) {
-  //   setLoading(false);
-  //   console.log("useData.data");
-  //   console.log(useData.data);
-  // }
- 
+ console.log("LATITUDE", lat1);
+ console.log("LONGTITUDE", long1);
 
   return (
     <div>
@@ -166,14 +188,15 @@ function ChecklogPage() {
                   height={48}
                 ></Image>
               </div>
-
+            
               {/* {data.emotion != null ? setStep(5)} */}
               {step === 1 && (
                 <Checkintime
                   line={lineId}
                   datacid={cid}
                   profile={profile}
-                  fn={fnSetStep}
+                    fn={fnSetStep}
+                    
                 />
               )}
               {step === 2 && (
@@ -218,9 +241,9 @@ function ChecklogPage() {
                   fn={fnSetStep}
                 />
               )}
-              {/* {step === 3 && } */}
-              {/* ปุ่ม flip เพื่อพลิกด้านหลัง */}
-              <div className="absolute  -bottom-2 right-3 ">
+                {/* {step === 3 && } */}
+                  {/* ปุ่ม flip เพื่อพลิกด้านหลัง */}
+                  <div className="absolute  -bottom-2 right-3 ">
                 <Image
                   className="mt-2 cursor-pointer"
                   onClick={() => {
@@ -237,6 +260,10 @@ function ChecklogPage() {
                   height={58}
                 ></Image>
               </div>
+                
+              
+                
+              
             </div>
           </div>
           {/* Show time and buttom refresh  gps now */}

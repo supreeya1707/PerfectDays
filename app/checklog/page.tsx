@@ -267,23 +267,7 @@ function ChecklogPage() {
             </div>
           </div>
           {/* Show time and buttom refresh  gps now */}
-          <div className="  pt-[620px] w-full">
-            <div className="flex flex-col items-center">
-              <div className="flex flex-row">
-                <div className="justify-self-center  text-4xl">
-                  {/* {hours}:{minutes}:{seconds} */}
-                </div>
-              </div>
-
-              <div className="flex flex-col items-center mt-5">
-                <div className="flex flex-row">
-                  {/* <Button className="bg-[#30485E] text-[16px] w-[321px]  ">
-                    UPDATE พิกัดอีกครั้ง
-                  </Button> */}
-                </div>
-              </div>
-            </div>
-          </div>
+         
         </div>
       )}
     </div>

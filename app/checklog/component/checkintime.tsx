@@ -35,8 +35,8 @@ const Checkintime = ({ line, datacid, profile, fn }: dataProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  console.log(line);
-  console.log(datacid);
+  // console.log(line);
+  console.log("ProfilePageCheckin",profile);
   const pathUrl: any = process.env.pathUrl;
   const [lat1, setLat1] = useState<any>({});
   const [long1, setLong1] = useState<any>({});
@@ -146,10 +146,11 @@ const Checkintime = ({ line, datacid, profile, fn }: dataProps) => {
       });
     }
     setLoading(false);
-    // await liff.init({ liffId: idcardliff }).then(async () => {
-    //   const profile = await liff.getProfile();
-    //   console.log("Profile", profile);
-    // });
+    await liff.init({ liffId: idcardliff }).then(async () => {
+      const profile = await liff.getProfile();
+      console.log("Profile", profile);
+    });
+    // console.log("ProfilePageCheckin",profile);
   };
 
   useEffect(() => {
@@ -305,7 +306,7 @@ const Checkintime = ({ line, datacid, profile, fn }: dataProps) => {
             <Image
               className="flex items-center self-start ml-1  rounded-full border-[15px] border-[#F26B22] "
               // src="/image/personal w.png"
-              src={profileid?.pictureUrl}
+              src={profile?.pictureUrl}
               alt={""}
               width={130}
               height={135}
@@ -389,7 +390,7 @@ const Checkintime = ({ line, datacid, profile, fn }: dataProps) => {
           </div>
         </div>
 
-        <div className="container  pt-[100px] w-full">
+        <div className="container  pt-[10npm0px] w-full">
           {data?.emotion != null ? (
             <div className="flex flex-col justify-center ">
               <div className="grid grid-cols-1  justify-items-center">

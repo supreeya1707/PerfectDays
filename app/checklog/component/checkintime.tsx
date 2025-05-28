@@ -385,12 +385,21 @@ const Checkintime = ({ line, datacid, profile, fn }: dataProps) => {
                     </Button>
                   </div>
                 )}
+                <div className=" mb-2">
+                  <div
+                    className="text-[16px]  text-start
+                    text-[#8F8B8B] "
+                  >
+                    ห่างจากสถานที่ทำงาน : {Math.round(distance)} เมตร
+                  </div>
+                </div>
               </div>
+              
             )}
           </div>
         </div>
 
-        <div className="container  pt-[10npm0px] w-full">
+        <div className="container  pt-[100px] w-full">
           {data?.emotion != null ? (
             <div className="flex flex-col justify-center ">
               <div className="grid grid-cols-1  justify-items-center">

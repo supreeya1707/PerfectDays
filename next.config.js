@@ -9,13 +9,13 @@ const nextConfig = {
         domains: ['profile.line-scdn.net'],
         unoptimized: true,
     },
-//     headers: 
-// [
-//         {
-//           key: 'Cache-Control',
-//           value: 'public, max-age=0, must-revalidate',
-//         },
-//       ],
+    headers: 
+[
+        {
+          key: 'Cache-Control',
+          value: 'no-cache, no-store, must-revalidate',
+        },
+      ],
 
     
     env: {

@@ -214,7 +214,12 @@ function TimeLinePage() {
     }
     console.log(yy);
     setDataYear(yy);
+    onLoadData();
   }, []);
+
+  const onLoadData = async () => {
+    await getDataOT(dayjs().month() + 1, dayjs().year());
+  };
 
   const onChange: DatePickerProps["onChange"] = async (date, dateString) => {
     dataMapShow = {};
